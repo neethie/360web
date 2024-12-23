@@ -1,5 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+
+import { corsConfig } from "./config/cors.js";
 
 import orderRoutes from "./routes/orderRoutes.js";
 import detailRoutes from "./routes/detailRoutes.js";
@@ -11,6 +14,7 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 
 const server = express();
+
 server.use(express.json());
 
 // ————— Rutas
