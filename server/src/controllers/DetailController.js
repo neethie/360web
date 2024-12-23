@@ -79,11 +79,7 @@ export class DetailController {
 
     static update = async (req, res) => {
         try {
-            const {
-                order_details_id,
-                product_id = null,
-                quantity = null,
-            } = req.body;
+            const { order_details_id, product_id, quantity } = req.body;
             const pool = await sql.connect(sqlConfig);
             const checkOrderDetail = await pool
                 .request()
@@ -99,27 +95,25 @@ export class DetailController {
                 return;
             }
 
-            if (quantity !== null) {
-                const checkStock = await pool
-                    .request()
-                    .input("product_id", sql.Int, product_id)
-                    .input("quantity", sql.Int, quantity)
-                    .execute("CheckProductStock");
+            const checkStock = await pool
+                .request()
+                .input("product_id", sql.Int, product_id)
+                .input("quantity", sql.Int, quantity)
+                .execute("CheckProductStock");
 
-                if (!checkStock.recordset[0].IsStockAvailable) {
-                    res.status(409).json({
-                        error: "No existe suficiente stock",
-                    });
-                    return;
-                }
+            if (!checkStock.recordset[0].IsStockAvailable) {
+                res.status(409).json({
+                    error: "No existe suficiente stock",
+                });
+                return;
             }
 
             const results = await pool
                 .request()
-                .input("order_id", sql.Int, order_id)
+                .input("order_details_id", sql.Int, order_details_id)
                 .input("product_id", sql.Int, product_id)
                 .input("quantity", sql.Int, quantity)
-                .execute("CreateOrderProducts");
+                .execute("UpdateOrderProducts");
 
             res.send(results.recordset);
         } catch (error) {

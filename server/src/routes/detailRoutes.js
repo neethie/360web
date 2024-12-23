@@ -47,7 +47,7 @@ router.patch(
     ]),
 
     handleErrors,
-    DetailController.create
+    DetailController.update
 );
 
 export default router;

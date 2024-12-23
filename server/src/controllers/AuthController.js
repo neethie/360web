@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 import { sqlConfig } from "../data/connection.js";
 import { SALT_ROUNDS } from "../config/securityConfig.js";
+import { generateJWT } from "../utils/jwt.js";
 
 export class AuthController {
     static register = async (req, res) => {
@@ -48,7 +49,7 @@ export class AuthController {
                 .request()
                 .input("email", sql.VarChar, email)
                 .query(
-                    "SELECT password, is_disabled FROM users WHERE email = @email"
+                    "SELECT user_id, password, is_disabled FROM users WHERE email = @email"
                 );
 
             if (result.recordset.length === 0) {
@@ -73,7 +74,8 @@ export class AuthController {
                 });
                 return;
             }
-            res.send("Ha iniciado sesión. Generar JWT");
+            const token = generateJWT(result.recordset[0].user_id);
+            res.send(token);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar iniciar sesión del usuario",

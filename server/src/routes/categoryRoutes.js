@@ -3,12 +3,14 @@ import { Router } from "express";
 import { CategoryController } from "../controllers/CategoryController.js";
 import { body, oneOf } from "express-validator";
 import { handleErrors } from "../middleware/validation.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
 router.get("/", CategoryController.getAll);
 router.post(
     "/create",
+    authenticate,
     body("name")
         .isLength({
             min: 3,
