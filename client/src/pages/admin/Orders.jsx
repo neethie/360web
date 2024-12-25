@@ -13,15 +13,12 @@ export default function Orders() {
                 <thead>
                     <tr className="text-gray-400 text-left border-t-2 border-b-2 h-10">
                         <th className="font-normal w-80">Cliente</th>
-                        <th className="font-normal w-60">Fecha y Hora</th>
+                        <th className="font-normal w-60">Fecha</th>
                         <th className="font-normal w-36">Total</th>
                         <th className="font-normal w-60">Estado</th>
                         <th className="font-normal text-center">Opciones</th>
                     </tr>
                 </thead>
-
-                <p>{}</p>
-
                 <tbody className="">
                     {TempOrders.map((order) => (
                         <Order key={order.id} order={order} />

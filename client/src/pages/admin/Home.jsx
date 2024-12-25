@@ -1,6 +1,6 @@
 import ResumeCard from "./components/home/ResumeCard";
 
-import { ItemType } from "../../utils/constants";
+import { ResumeType } from "../../utils/constants";
 import Earnings from "./components/home/Earnings";
 import Header from "../../components/ui/layouts/admin/Header";
 
@@ -10,13 +10,9 @@ export default function Home() {
             <Header />
             <h3 className="font-bold text-xl">Dashboard</h3>
             <section className="">
-                <div className="flex gap-2">
-                    {Object.values(ItemType).map((item) => (
-                        <ResumeCard
-                            key={item.type}
-                            name={item.name}
-                            color={item.color}
-                        />
+                <div className="flex md:flex-row flex-col gap-2">
+                    {ResumeType.getAllTypes().map((item) => (
+                        <ResumeCard key={item.type} resume={item.type} />
                     ))}
                 </div>
             </section>
