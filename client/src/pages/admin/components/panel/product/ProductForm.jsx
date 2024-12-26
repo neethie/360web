@@ -1,4 +1,17 @@
-export default function ProductForm({ create }) {
+import { useState } from "react";
+
+export default function ProductForm({ create, product }) {
+    const [productInfo, setProductInfo] = useState({
+        name: "",
+        brand: "",
+        category_id: "1",
+        image: "",
+        price: 0,
+        stock: 0,
+    });
+    if (product) {
+        setProductInfo(product);
+    }
     return (
         <>
             <h2 className="font-semibold text-3xl">
@@ -16,57 +29,53 @@ export default function ProductForm({ create }) {
 
                         <div className="flex flex-col gap-2">
                             <label
-                                htmlFor="panel_product_name"
+                                htmlFor="form_product_name"
                                 className="font-medium"
                             >
                                 Nombre del producto
                             </label>
                             <input
                                 type="text"
-                                name="panel_product_name"
-                                id="panel_product_name"
+                                name="form_product_name"
+                                id="form_product_name"
                                 placeholder="Ryzen 5 3500u"
                                 className="bg-gray-100 p-2 rounded-xl focus:bg-transparent"
+                                value={productInfo.name}
                             />
                         </div>
 
                         <div className="flex gap-4">
                             <div className="flex flex-col gap-2">
                                 <label
-                                    htmlFor="panel_product_brand"
+                                    htmlFor="form_product_brand"
                                     className="font-medium"
                                 >
                                     Marca
                                 </label>
                                 <input
                                     type="text"
-                                    name="panel_product_name"
-                                    id="panel_product_name"
+                                    name="form_product_name"
+                                    id="form_product_name"
                                     placeholder="AMD"
                                     className="bg-gray-100 p-2 rounded-xl"
+                                    value={productInfo.brand}
                                 />
                             </div>
                             <div className="flex flex-col w-full gap-2">
                                 <label
-                                    htmlFor="panel_product_category"
+                                    htmlFor="form_product_category"
                                     className="font-medium"
                                 >
                                     Categoria
                                 </label>
 
                                 <select
-                                    name="panel_product_category"
-                                    id="panel_product_category"
+                                    name="form_product_category"
+                                    id="form_product_category"
                                     className="bg-gray-100 p-2 rounded-xl"
                                 >
                                     <option value="none" selected disabled>
                                         Escoge una categoria
-                                    </option>
-                                    <option value="procesadores">
-                                        Procesadores
-                                    </option>
-                                    <option value="procesadores">
-                                        Procesadores
                                     </option>
                                 </select>
                             </div>
@@ -83,8 +92,8 @@ export default function ProductForm({ create }) {
                         </legend>
                         <input
                             type="file"
-                            name="panel_product_image"
-                            id="panel_product_image"
+                            name="form_product_image"
+                            id="form_product_image"
                             accept="image/png, image/jpeg"
                             className="w-full"
                         />
@@ -105,35 +114,37 @@ export default function ProductForm({ create }) {
                         <div className="flex flex-row gap-4">
                             <div className="flex flex-col">
                                 <label
-                                    htmlFor="panel_product_price"
+                                    htmlFor="form_product_price"
                                     className="font-medium"
                                 >
                                     Precio
                                 </label>
                                 <input
                                     type="number"
-                                    name="panel_product_price"
-                                    id="panel_product_price"
+                                    name="form_product_price"
+                                    id="form_product_price"
                                     placeholder="2,000.00"
                                     step={0.01}
                                     min={0}
                                     className="bg-gray-100 p-2 rounded-xl"
+                                    value={productInfo.price}
                                 />
                             </div>
                             <div className="flex flex-col">
                                 <label
-                                    htmlFor="panel_product_stock"
+                                    htmlFor="form_product_stock"
                                     className="font-medium"
                                 >
                                     Existencias
                                 </label>
                                 <input
                                     type="number"
-                                    name="panel_product_stock"
-                                    id="panel_product_stock"
+                                    name="form_product_stock"
+                                    id="form_product_stock"
                                     placeholder="12"
                                     min={1}
                                     className="bg-gray-100 p-2 rounded-xl"
+                                    value={productInfo.stock}
                                 />
                             </div>
                         </div>

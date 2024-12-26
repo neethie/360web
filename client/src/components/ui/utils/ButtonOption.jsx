@@ -4,7 +4,7 @@ import { FaPen } from "react-icons/fa";
 
 import Button from "./Button";
 
-export default function ButtonOption({ option }) {
+export default function ButtonOption({ option, handleClick }) {
     const getBgColor = () => {
         switch (option) {
             case 1: {
@@ -32,5 +32,5 @@ export default function ButtonOption({ option }) {
             }
         }
     };
-    return <Button text={getIcon()} />;
+    return <Button text={getIcon()} handle={handleClick} />;
 }

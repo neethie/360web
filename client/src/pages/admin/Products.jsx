@@ -19,7 +19,11 @@ export default function Products() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-x-2 gap-y-2 ">
                 {ProductsTemp.map((product) => (
-                    <ProductCard key={product.id} edit product={product} />
+                    <ProductCard
+                        key={product.product_id}
+                        edit
+                        product={product}
+                    />
                 ))}
             </div>
         </div>
