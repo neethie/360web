@@ -1,15 +1,17 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { TempCategories } from "../../../../data/categories";
+
 import Logo from "../../utils/Logo";
+import { isMobile } from "../../../../utils/mobile";
 
 import { IoIosMenu } from "react-icons/io";
-
 import { CiUser } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
-
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-
-import { isMobile } from "../../../../utils/mobile";
-import { useState } from "react";
+import CategoriesMenu from "./CategoriesMenu";
 
 export default function Header() {
     const [buttonStore, setButtonStore] = useState(false);
@@ -19,7 +21,7 @@ export default function Header() {
     };
 
     return (
-        <header className="flex justify-between px-2 py-4 items-center mx-4">
+        <header className="flex justify-between px-6 py-4 items-center md:fixed bg-white md:w-screen shadow-lg z-50 h-20">
             {isMobile() ? (
                 <>
                     <button>
@@ -40,28 +42,39 @@ export default function Header() {
                     <Logo />
                     <nav className="flex items-center gap-4 font-semibold text-xs">
                         <ul>
-                            <button className="uppercase hover:bg-black hover:text-white px-2 py-1 transition-all">
+                            <Link to={"/"} className="uppercase px-2 py-1 ">
                                 <p>Inicio</p>
-                            </button>
+                            </Link>
                         </ul>
                         <ul>
-                            <button
+                            <Link
+                                to={"/search"}
+                                className="uppercase px-2 py-1 flex items-center gap-2 "
                                 onMouseEnter={handleMouse}
                                 onMouseLeave={handleMouse}
-                                className="uppercase hover:bg-black hover:text-white px-2 py-1 transition-all flex items-center gap-2"
                             >
                                 <p>Tienda</p>
                                 {!buttonStore ? (
                                     <IoIosArrowDown />
                                 ) : (
-                                    <IoIosArrowUp />
+                                    <>
+                                        <IoIosArrowUp />
+                                        <nav className="absolute top-12 bg-white p-2 space-y-1">
+                                            {TempCategories.map((category) => (
+                                                <CategoriesMenu
+                                                    key={category.category_id}
+                                                    category={category}
+                                                />
+                                            ))}
+                                        </nav>
+                                    </>
                                 )}
-                            </button>
+                            </Link>
                         </ul>
                         <ul>
-                            <button className="uppercase hover:bg-black hover:text-white px-2 py-1 transition-all">
-                                <p>Contáctanos</p>
-                            </button>
+                            <Link to={"/"} className="uppercase px-2 py-1 ">
+                                <p>Contacto</p>
+                            </Link>
                         </ul>
                     </nav>
                     <div className="flex gap-2 relative">

@@ -36,7 +36,7 @@ export const TempCategories = [
     },
     {
         category_id: 8,
-        name: "Belleza y Cuidado Personal",
+        name: "Belleza y Cuidado",
         status: 1,
     },
     {

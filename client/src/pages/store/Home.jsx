@@ -3,21 +3,18 @@ import Hero from "./components/Hero";
 import ProductCard from "../../components/ui/products/ProductCard";
 import { ProductsTemp } from "../../data/products";
 
-import Button from "../../components/ui/utils/Button";
-
 export default function Store() {
     return (
         <div className="p-4 space-y-4">
             <Hero />
 
-            <div className="space-y-2">
-                <div className="flex justify-between">
-                    <p className="text-2xl font-semibold">
-                        Los mejores procesadores
+            <div className="space-y-4">
+                <div className="flex justify-center ">
+                    <p className="text-3xl font-semibold text-center">
+                        Procesadores Gama Alta
                     </p>
-                    <Button text={"Ver todos"} classname={"bg-blue-400"} />
                 </div>
-                <div className="flex justify-around">
+                <div className="grid md:grid-cols-4 grid-rows-1 justify-items-center">
                     <ProductCard product={ProductsTemp[0]} />
                     <ProductCard product={ProductsTemp[1]} />
                     <ProductCard product={ProductsTemp[2]} />

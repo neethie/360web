@@ -16,6 +16,7 @@ import Store from "./pages/store/Home";
 
 import AuthLayout from "./layouts/AuthLayout";
 import Auth from "./pages/auth/Home";
+import Search from "./pages/store/Search";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")).render(
                 </Route>
                 <Route path="/" element={<StoreLayout />}>
                     <Route index element={<Store />} />
+                    <Route path="search" element={<Search />} />
                 </Route>
                 <Route path="/auth" element={<AuthLayout />}>
                     <Route index element={<Auth />} />

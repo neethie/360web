@@ -5,7 +5,9 @@ export default function StoreLayout() {
     return (
         <>
             <Header />
-            <Outlet />
+            <div className="md:py-28">
+                <Outlet />
+            </div>
         </>
     );
 }
