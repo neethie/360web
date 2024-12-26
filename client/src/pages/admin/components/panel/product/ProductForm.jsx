@@ -1,7 +1,9 @@
-export default function CreateProduct() {
+export default function ProductForm({ create }) {
     return (
         <>
-            <h2 className="font-semibold text-3xl">Nuevo Producto</h2>
+            <h2 className="font-semibold text-3xl">
+                {create ? "Nuevo Producto" : "Editar Producto"}
+            </h2>
             <div className="">
                 <form
                     action=""
@@ -90,7 +92,9 @@ export default function CreateProduct() {
                     <div className="">
                         <input
                             type="submit"
-                            value="Crear Producto"
+                            value={
+                                create ? "Crear Producto" : "Editar Producto"
+                            }
                             className="bg-blue-400 opacity-80 hover:opacity-100 cursor-pointer text-white px-2 py-1 rounded-md"
                         />
                     </div>

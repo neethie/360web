@@ -39,7 +39,7 @@ export default function Header() {
                 </>
             ) : (
                 <>
-                    <Logo />
+                    <Logo to={"/"} />
                     <nav className="flex items-center gap-4 font-semibold text-xs">
                         <ul>
                             <Link to={"/"} className="uppercase px-2 py-1 ">

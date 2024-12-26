@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import { RiHome4Line } from "react-icons/ri";
 import { MdOutlineShoppingBag, MdOutlineSettings } from "react-icons/md";
 import { FiUsers } from "react-icons/fi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { TiArrowShuffle } from "react-icons/ti";
 
 import Logo from "../../utils/Logo";
 import { useAppStore } from "../../../../store/UseAppStore";
@@ -33,7 +34,7 @@ export default function Aside() {
                 mobileAdmin ? "w-screen" : "hidden"
             } md:w-[200px] text-gray-600 min-h-screen py-4 fixed top-0 left-0 md:flex flex-col border-r-2 bg-white`}
         >
-            <Logo />
+            <Logo to={"/admin"} />
 
             <nav className="my-4 space-y-2 uppercase font-semibold text-xs px-2">
                 <NavLink
@@ -119,6 +120,13 @@ export default function Aside() {
                     <MdOutlineSettings className="w-4 h-4" />
                     <p>Ajustes</p>
                 </button>
+                <Link
+                    to="/"
+                    className=" flex items-center gap-2  py-2 px-4 transition-all w-full uppercase hover:translate-x-1"
+                >
+                    <TiArrowShuffle className="w-4 h-4" />
+                    <p>Ir a la tienda</p>
+                </Link>
             </nav>
         </aside>
     );

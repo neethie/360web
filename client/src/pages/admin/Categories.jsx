@@ -1,12 +1,23 @@
 import { TempCategories } from "../../data/categories";
 import Category from "./components/panel/categories/Category";
 
+import { Link } from "react-router-dom";
+import Button from "../../components/ui/utils/Button";
+
 export default function Categories() {
     return (
         <div className="space-y-6">
-            <div className="">
-                <h2 className="font-semibold text-3xl">Todas las categorias</h2>
-                <p>12490 en total</p>
+            <div className="flex justify-between items-center">
+                <div className="">
+                    <h2 className="font-semibold text-3xl">
+                        Todas las categorias
+                    </h2>
+                    <p>12490 en total</p>
+                </div>
+
+                <Link to={"create"}>
+                    <Button text={"Crear"} classname={"bg-blue-600"} />
+                </Link>
             </div>
             <table className="w-full p-2 border-spacing-y-12">
                 <thead>

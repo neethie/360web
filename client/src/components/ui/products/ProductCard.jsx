@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../utils/Button";
 
 export default function ProductCard({ edit, product }) {
@@ -15,7 +16,14 @@ export default function ProductCard({ edit, product }) {
                         Q{price}.00
                     </p>
                     {edit ? (
-                        <Button text="Editar" classname={"bg-blue-500"} />
+                        <>
+                            <Link to={"edit/1"}>
+                                <Button
+                                    text="Editar"
+                                    classname={"bg-blue-500"}
+                                />
+                            </Link>
+                        </>
                     ) : (
                         <Button text="Agregar" classname={"bg-green-500"} />
                     )}

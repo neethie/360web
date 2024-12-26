@@ -11,7 +11,7 @@ export default function AuthLayout() {
         <>
             <div className="flex items-center justify-center h-screen bg-gray-100 flex-col gap-5">
                 <Logo />
-                <div className="flex bg-white rounded-xl">
+                <div className="flex bg-white rounded-xl shadow-lg">
                     {authForm === 0 ? <Login /> : <Register />}
                 </div>
             </div>

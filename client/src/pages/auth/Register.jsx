@@ -6,6 +6,11 @@ export default function Register() {
     const handleClick = () => {
         setAuthForm(0);
     };
+
+    const handleSubmit = (e) => {
+        e.prevent.default();
+    };
+
     return (
         <>
             <div className="bg-blue-400 opacity-80 p-4 rounded-xl text-white flex flex-col items-center justify-center">
@@ -28,7 +33,7 @@ export default function Register() {
                     Ingresa unas credenciales para crear una cuenta
                 </p>
 
-                <form action="" className="my-2 space-y-4">
+                <form onSubmit={() => handleSubmit} className="my-2 space-y-4">
                     <div className="space-y-2">
                         <input
                             type="text"

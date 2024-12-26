@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 
-export default function Logo() {
+export default function Logo({ to }) {
     return (
-        <NavLink to="/" className="flex flex-col items-center">
+        <NavLink to={to} className="flex flex-col items-center">
             <img
                 src="./logo.png"
                 alt="Logo mi tiendita"
