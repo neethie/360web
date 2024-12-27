@@ -55,4 +55,20 @@ export class CategoryController {
             console.error(error);
         }
     };
+
+    static getCount = async (req, res) => {
+        try {
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .query("SELECT COUNT(*) FROM categories WHERE is_disabled = 0");
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener el conteo de categorias",
+            });
+            console.error(error);
+        }
+    };
 }

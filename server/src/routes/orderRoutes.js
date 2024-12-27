@@ -6,6 +6,7 @@ import { handleErrors } from "../middleware/validation.js";
 
 const router = Router();
 
+router.get("/count", OrderController.getCount);
 router.get("/", OrderController.getAll);
 router.get(
     "/:order_id",

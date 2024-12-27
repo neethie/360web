@@ -9,7 +9,7 @@ export default function ProductCard({ edit, product }) {
             <div className="p-2">
                 <p className="font-semibold">
                     {name}
-                    {!!edit && <span>{product_id}</span>}
+                    {!!edit && <span> ({product_id})</span>}
                 </p>
                 <p className="text-sm">{brand}</p>
                 <div className="flex justify-between items-center">

@@ -3,6 +3,21 @@ import sql from "mssql";
 import { sqlConfig } from "../data/connection.js";
 
 export class UserController {
+    static getCount = async (req, res) => {
+        try {
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .query("SELECT COUNT(*) FROM users WHERE is_disabled = 0");
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener el conteo de usuarios",
+            });
+            console.error(error);
+        }
+    };
     static getAll = async (req, res) => {
         try {
             const pool = await sql.connect(sqlConfig);
@@ -10,9 +25,7 @@ export class UserController {
 
             // Si hay registros
             if (results.recordset.length) {
-                res.status(200).json({
-                    data: results.recordset,
-                });
+                res.send(results.recordset);
                 return;
             }
 

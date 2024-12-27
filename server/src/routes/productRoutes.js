@@ -6,6 +6,7 @@ import { body, param } from "express-validator";
 
 const router = Router();
 
+router.get("/count", ProductController.getCount);
 router.get("/", ProductController.getAll);
 
 router.get(

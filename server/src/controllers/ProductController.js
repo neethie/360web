@@ -3,6 +3,21 @@ import sql from "mssql";
 import { sqlConfig } from "../data/connection.js";
 
 export class ProductController {
+    static getCount = async (req, res) => {
+        try {
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .query("SELECT COUNT(*) FROM products WHERE is_disabled = 0");
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener el conteo de products",
+            });
+            console.error(error);
+        }
+    };
     static getAll = async (req, res) => {
         try {
             const pool = await sql.connect(sqlConfig);

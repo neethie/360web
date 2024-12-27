@@ -1,10 +1,21 @@
-import { TempCategories } from "../../data/categories";
+import { useQuery } from "@tanstack/react-query";
+
 import Category from "./components/panel/categories/Category";
 
 import { Link } from "react-router-dom";
 import Button from "../../components/ui/utils/Button";
+import { CategoriesAPI } from "../../services/categoriesAPI";
 
 export default function Categories() {
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["categories"],
+        queryFn: CategoriesAPI.getAll,
+    });
+
+    if (isLoading) return <div className="">Cargando...</div>;
+    if (isError) return <div className="">Error: {error.message}</div>;
+    if (!data) return <div className="">No hay datos disponibles</div>;
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -12,7 +23,7 @@ export default function Categories() {
                     <h2 className="font-semibold text-3xl">
                         Todas las categorias
                     </h2>
-                    <p>12490 en total</p>
+                    <p>{data.length} en total</p>
                 </div>
 
                 <Link to={"create"}>
@@ -29,7 +40,7 @@ export default function Categories() {
                     </tr>
                 </thead>
                 <tbody className="">
-                    {TempCategories.map((category) => (
+                    {data.map((category) => (
                         <Category
                             key={category.category_id}
                             category={category}

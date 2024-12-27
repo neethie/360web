@@ -1,12 +1,22 @@
-import { TempOrders } from "../../data/orders";
+import { useQuery } from "@tanstack/react-query";
+
 import Order from "./components/panel/orders/Order";
+import { OrdersAPI } from "../../services/ordersApi";
 
 export default function Orders() {
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["orders"],
+        queryFn: OrdersAPI.getAll,
+    });
+
+    if (isLoading) return <div className="">Cargando...</div>;
+    if (isError) return <div className="">Error: {error.message}</div>;
+    if (!data) return <div className="">No hay datos disponibles</div>;
     return (
         <div className="space-y-6">
             <div className="">
                 <h2 className="font-semibold text-3xl">Historial de Ordenes</h2>
-                <p>12490 en total</p>
+                <p>{data.length} en total</p>
             </div>
 
             <table className="w-full p-2 border-spacing-y-12">
@@ -20,8 +30,8 @@ export default function Orders() {
                     </tr>
                 </thead>
                 <tbody className="">
-                    {TempOrders.map((order) => (
-                        <Order key={order.id} order={order} />
+                    {data.map((order) => (
+                        <Order key={order.order_id} order={order} />
                     ))}
                 </tbody>
             </table>

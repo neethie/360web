@@ -1,12 +1,23 @@
-import { TempUsers } from "../../data/users";
+import { useQuery } from "@tanstack/react-query";
+
+import { getUsers } from "../../services/usersAPI";
 import User from "./components/panel/users/User";
 
 export default function Users() {
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["users"],
+        queryFn: getUsers,
+    });
+
+    if (isLoading) return <div className="">Cargando...</div>;
+    if (isError) return <div className="">Error: {error.message}</div>;
+    if (!data) return <div className="">No hay datos disponibles</div>;
+
     return (
         <div className="space-y-6">
             <div className="">
                 <h2 className="font-semibold text-3xl">Todos los usuarios</h2>
-                <p>12490 en total</p>
+                <p>{data.length} en total</p>
             </div>
             <table className="w-full p-2 border-spacing-y-12">
                 <thead>
@@ -18,7 +29,7 @@ export default function Users() {
                     </tr>
                 </thead>
                 <tbody className="">
-                    {TempUsers.map((user) => (
+                    {data.map((user) => (
                         <User user={user} key={user.user_id} />
                     ))}
                 </tbody>

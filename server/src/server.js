@@ -15,6 +15,7 @@ dotenv.config();
 
 const server = express();
 
+server.use(cors(corsConfig));
 server.use(express.json());
 
 // ————— Rutas

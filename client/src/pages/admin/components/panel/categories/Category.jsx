@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 export default function Category({ category }) {
     const getStatus = () => {
-        switch (category.status) {
-            case 1: {
+        switch (category.is_disabled) {
+            case false: {
                 return (
                     <div className="flex items-center gap-2 w-max px-2 rounded-full bg-green-200 text-green-800">
                         <CiCircleCheck />
@@ -16,7 +16,7 @@ export default function Category({ category }) {
                     </div>
                 );
             }
-            case 0: {
+            case true: {
                 return (
                     <div className="flex items-center gap-2 w-max px-2 rounded-full bg-red-200 text-red-800">
                         <CiCircleRemove />
@@ -29,7 +29,7 @@ export default function Category({ category }) {
     return (
         <tr className="font-semibold text-base h-12">
             <td>{category.name}</td>
-            <td>{getStatus()}</td>
+            <td>{getStatus}</td>
             <td>-</td>
             <td className="">
                 <div className="flex flex-row gap-2 justify-center text-white">
