@@ -4,8 +4,8 @@ import Button from "../utils/Button";
 export default function ProductCard({ edit, product }) {
     const { product_id, name, brand, price } = product;
     return (
-        <div className="w-max h-max rounded-md border ">
-            <div className="w-[250px] h-[250px] bg-gray-200"></div>
+        <div className="w-auto h-max rounded-md border px-1 shadow-md">
+            <div className="w-auto h-[250px] bg-gray-200"></div>
             <div className="p-2">
                 <p className="font-semibold">
                     {name}

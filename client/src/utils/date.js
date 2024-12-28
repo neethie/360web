@@ -9,3 +9,18 @@ export const convertDate = (isoDate) => {
     });
     return newDate;
 };
+
+export const monthsString = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abri",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+];

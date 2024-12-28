@@ -14,7 +14,7 @@ export default function Store() {
                         Procesadores Gama Alta
                     </p>
                 </div>
-                <div className="grid md:grid-cols-4 grid-rows-1 justify-items-center">
+                <div className="grid md:grid-cols-4 grid-rows-1 justify-items-center min-w-0">
                     <ProductCard product={ProductsTemp[0]} />
                     <ProductCard product={ProductsTemp[1]} />
                     <ProductCard product={ProductsTemp[2]} />

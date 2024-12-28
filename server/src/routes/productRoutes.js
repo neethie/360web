@@ -8,7 +8,15 @@ const router = Router();
 
 router.get("/count", ProductController.getCount);
 router.get("/", ProductController.getAll);
+router.get(
+    "/:product_id",
+    param("product_id")
+        .isInt({ min: 1 })
+        .withMessage("El product_id es inválido"),
 
+    handleErrors,
+    ProductController.getById
+);
 router.get(
     "/search",
     param("name").optional(),

@@ -1,6 +1,6 @@
 export default function Button({ text, handle, classname }) {
     const handleClick = () => {
-        handle();
+        if (handle) handle();
     };
     return (
         <button

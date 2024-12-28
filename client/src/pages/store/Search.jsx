@@ -1,7 +1,10 @@
-import ProductCard from "../../components/ui/products/ProductCard";
-import { ProductsTemp } from "../../data/products";
 import { useState } from "react";
-import { TempCategories } from "../../data/categories";
+import { useQueries } from "@tanstack/react-query";
+
+import { CategoriesAPI } from "../../services/categoriesAPI";
+import { ProductsAPI } from "../../services/productsAPI";
+
+import ProductCard from "../../components/ui/products/ProductCard";
 import CategoryItem from "./components/CategoryItem";
 
 export default function Search() {
@@ -23,13 +26,40 @@ export default function Search() {
         setFilter({ ...filter, category: category_id });
     };
 
+    const response = useQueries({
+        queries: [
+            {
+                queryKey: ["getCategories"],
+                queryFn: CategoriesAPI.getAll,
+            },
+            {
+                queryKey: ["getProducts"],
+                queryFn: ProductsAPI.getAll,
+            },
+        ],
+    });
+
+    const categories = response[0];
+    const products = response[1];
+
+    if (categories.isLoading || products.isLoading)
+        return <div className="">Cargando...</div>;
+    if (categories.isError || products.isError)
+        return (
+            <div className="">
+                Error: {categories.error}, {products.error}
+            </div>
+        );
+    if (!categories.data || !products.data)
+        return <div className="">No hay datos disponibles</div>;
+
     return (
         <div className="grid grid-cols-[1fr_3fr]">
             <form className="border mx-10 h-max">
                 <p className="border-b p-2 font-semibold">Filtrar por</p>
                 <div className="flex flex-col p-2">
                     <p className="font-semibold">Categorias</p>
-                    {TempCategories.map((category) => (
+                    {categories.data.map((category) => (
                         <CategoryItem
                             key={category.category_id}
                             handleClick={handleClick}
@@ -90,16 +120,17 @@ export default function Search() {
                     </button>
                 </div>
             </form>
-            <main className="space-y-2">
+            <main className="space-y-2 pr-8">
                 <p className="text-2xl font-semibold">
                     Resultados de la búsqueda
                 </p>
-                <div className="grid grid-cols-3 gap-8">
-                    <ProductCard product={ProductsTemp[3]} />
-                    <ProductCard product={ProductsTemp[3]} />
-                    <ProductCard product={ProductsTemp[3]} />
-                    <ProductCard product={ProductsTemp[3]} />
-                    <ProductCard product={ProductsTemp[3]} />
+                <div className="grid grid-cols-3 gap-4">
+                    {products.data.map((product) => (
+                        <ProductCard
+                            key={product.product_id}
+                            product={product}
+                        />
+                    ))}
                 </div>
             </main>
         </div>

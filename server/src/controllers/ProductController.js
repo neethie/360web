@@ -62,6 +62,24 @@ export class ProductController {
         }
     };
 
+    static getById = async (req, res) => {
+        try {
+            const { product_id } = req.params;
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .input("product_id", sql.Int, product_id)
+                .query("SELECT * FROM products WHERE product_id = @product_id");
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener el producto",
+            });
+            console.error(error);
+        }
+    };
+
     static create = async (req, res) => {
         try {
             const { name, brand, price, stock, category_id, code } = req.body;

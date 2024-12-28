@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ProductsAPI } from "../../../../../services/productsAPI";
 
-export default function ProductForm({ create, product }) {
+export default function ProductForm({ create }) {
     const [productInfo, setProductInfo] = useState({
         name: "",
         brand: "",
@@ -9,9 +12,26 @@ export default function ProductForm({ create, product }) {
         price: 0,
         stock: 0,
     });
-    if (product) {
-        setProductInfo(product);
+
+    const { product } = useParams();
+
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["getProduct", product],
+        queryFn: () => ProductsAPI.getById(product),
+    });
+
+    useEffect(() => {
+        if (!create && data) {
+            setProductInfo(data[0]);
+        }
+    }, [create, data]);
+
+    if (!create) {
+        if (isLoading) return <div className="">Cargando...</div>;
+        if (isError) return <div className="">Hubo un error</div>;
+        if (!data) return <div className="">No hay datos</div>;
     }
+
     return (
         <>
             <h2 className="font-semibold text-3xl">

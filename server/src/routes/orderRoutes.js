@@ -5,7 +5,7 @@ import { param, body } from "express-validator";
 import { handleErrors } from "../middleware/validation.js";
 
 const router = Router();
-
+router.get("/earnings", OrderController.getEarnings);
 router.get("/count", OrderController.getCount);
 router.get("/", OrderController.getAll);
 router.get(

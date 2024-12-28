@@ -7,9 +7,11 @@ export default function CategoryItem({ category, selected, handleClick }) {
             className="flex justify-between items-center px-2"
             onClick={() => handleClick(category.category_id)}
         >
-            <p className="">{category.name}</p>
+            <p className="text-left">{category.name}</p>
             <FaCheck
-                className={`${selected ? "text-blue-400" : "text-gray-400"}`}
+                className={`${
+                    selected ? "text-blue-400" : "text-gray-400"
+                } w-4 h-4`}
             />
         </button>
     );

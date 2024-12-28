@@ -3,6 +3,23 @@ import sql from "mssql";
 import { sqlConfig } from "../data/connection.js";
 
 export class OrderController {
+    static getEarnings = async (req, res) => {
+        try {
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .query(
+                    "SELECT SUM(total_price) FROM orders WHERE MONTH(date_creation)  = MONTH(GETDATE())"
+                );
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener las ganancias de órdenes",
+            });
+            console.error(error);
+        }
+    };
     static getCount = async (req, res) => {
         try {
             const pool = await sql.connect(sqlConfig);

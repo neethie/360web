@@ -19,4 +19,13 @@ export class ProductsAPI {
             console.error(error);
         }
     };
+    static getById = async (product_id) => {
+        try {
+            const url = `/products/${product_id}`;
+            const { data } = await api(url);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }

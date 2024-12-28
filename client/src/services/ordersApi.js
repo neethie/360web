@@ -19,4 +19,13 @@ export class OrdersAPI {
             console.error(error);
         }
     };
+    static getEarnings = async () => {
+        try {
+            const url = "/orders/earnings";
+            const { data } = await api(url);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }
