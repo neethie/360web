@@ -19,6 +19,26 @@ export class CategoryController {
         }
     };
 
+    static getById = async (req, res) => {
+        try {
+            const { category_id } = req.params;
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .input("category_id", sql.Int, category_id)
+                .query(
+                    "SELECT * FROM categories WHERE category_id = @category_id"
+                );
+
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener la categoria",
+            });
+            console.error(error);
+        }
+    };
+
     static create = async (req, res) => {
         try {
             const { name } = req.body;

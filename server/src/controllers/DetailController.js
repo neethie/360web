@@ -10,9 +10,7 @@ export class DetailController {
             const results = await pool
                 .request()
                 .input("order_id", sql.Int, order_id)
-                .query(
-                    "SELECT * FROM order_products WHERE order_id = @order_id"
-                );
+                .execute("LoadOrderDetailsByMaster");
 
             if (!results.recordset.length) {
                 res.status(404).json({
