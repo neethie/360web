@@ -112,13 +112,14 @@ export default function AdminAside() {
                     <FiUsers className="w-4 h-4" />
                     <p>Usuarios</p>
                 </NavLink>
-                <button
+                <Link
+                    to="config"
                     onClick={handleMobileMenu}
                     className=" flex items-center gap-2  py-2 px-4 transition-all w-full uppercase hover:translate-x-1"
                 >
                     <MdOutlineSettings className="w-4 h-4" />
                     <p>Ajustes</p>
-                </button>
+                </Link>
                 <Link
                     to="/"
                     className=" flex items-center gap-2  py-2 px-4 transition-all w-full uppercase hover:translate-x-1"

@@ -6,5 +6,5 @@ export const formSchema = yup.object().shape({
         .min(3, "Mínimo 3 caracteres")
         .max(45, "Máximo 45 caracteres")
         .required("El nombre es obligatorio"),
-    status: yup.number(),
+    is_disabled: yup.number(),
 });

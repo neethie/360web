@@ -19,4 +19,13 @@ export class UsersAPI {
             console.error(error);
         }
     };
+    static getById = async (user_id) => {
+        try {
+            const url = `/users/${user_id}`;
+            const { data } = await api(url);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }

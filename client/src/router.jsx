@@ -19,6 +19,8 @@ import CreateProductView from "@/views/admin/product/CreateProductView";
 import UsersView from "@/views/admin/UsersView";
 import EditUserView from "@/views/admin/user/EditUserView";
 
+import ConfigView from "@/views/admin/ConfigView";
+
 import MainView from "@/views/store/MainView";
 import SearchView from "@/views/store/SearchView";
 import ContactView from "@/views/store/ContactView";
@@ -38,6 +40,7 @@ export default function Router() {
 
                 <Route path="admin" element={<AdminLayout />}>
                     <Route index element={<DashboardView />} />
+                    <Route path="config" element={<ConfigView />} />
                     <Route path="categories">
                         <Route index element={<CategoriesView />} />
                         <Route path="create" element={<CreateCategoryView />} />

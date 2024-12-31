@@ -1,21 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import { ui } from "@/utils/ui";
+
+import { CategoriesAPI } from "@/services/categoriesApi";
 
 import { IoIosMenu } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { Popover, PopoverPanel } from "@headlessui/react";
+
 import Logo from "./Logo";
 
 export default function Header() {
-    const [buttonStore, setButtonStore] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const handleEnter = () => setIsHovered(true);
+    const handleExit = () => setIsHovered(false);
 
-    const handleMouse = () => {
-        setButtonStore(!buttonStore);
-    };
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["loadCategories"],
+        queryFn: CategoriesAPI.getAll,
+    });
+
+    if (isLoading) return "Cargando...";
+    if (isError) return "Error";
+    if (!data) return "No hay categorias";
 
     return (
         <header className="flex justify-between px-6 py-4 items-center md:fixed bg-white md:w-screen shadow-lg z-50 h-20">
@@ -44,22 +56,47 @@ export default function Header() {
                             </Link>
                         </ul>
                         <ul>
-                            <Link
-                                to={"/search"}
-                                className="uppercase px-2 py-1 flex items-center gap-2 "
-                                onMouseEnter={handleMouse}
-                                onMouseLeave={handleMouse}
+                            <Popover
+                                className="relative"
+                                onMouseEnter={handleEnter}
+                                onMouseLeave={handleExit}
                             >
-                                <p>Tienda</p>
-                                {!buttonStore ? (
-                                    <IoIosArrowDown />
-                                ) : (
-                                    <>
-                                        <IoIosArrowUp />
-                                        <nav className="absolute top-12 bg-white p-2 space-y-1"></nav>
-                                    </>
-                                )}
-                            </Link>
+                                <Link
+                                    to={"/search"}
+                                    className="uppercase px-2 py-1 flex items-center gap-2 "
+                                >
+                                    <p>Tienda</p>
+                                    {!isHovered ? (
+                                        <IoIosArrowDown />
+                                    ) : (
+                                        <>
+                                            <IoIosArrowUp />
+                                            <PopoverPanel
+                                                static
+                                                className="absolute left-0 mt-2 bg-white shadow-lg rounded-md p-2 z-10"
+                                                style={{ top: "100%" }}
+                                            >
+                                                <div className="flex flex-col">
+                                                    {data.map((category) => (
+                                                        <Link
+                                                            to={"/search"}
+                                                            key={
+                                                                category.category_id
+                                                            }
+                                                            className="px-4 py-2 hover:bg-gray-100 rounded-md"
+                                                            onClick={() =>
+                                                                handleExit()
+                                                            }
+                                                        >
+                                                            {category.name}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </PopoverPanel>
+                                        </>
+                                    )}
+                                </Link>
+                            </Popover>
                         </ul>
                         <ul>
                             <Link

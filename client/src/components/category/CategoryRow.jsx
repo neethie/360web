@@ -15,7 +15,7 @@ export default function CategoryRow({ category }) {
                 <div
                     className={`flex items-center gap-2 w-max px-2 rounded-full ${
                         category.is_disabled
-                            ? "bg-red-200 text-red-800}"
+                            ? "bg-red-200 text-red-800"
                             : "bg-green-200 text-green-800"
                     }`}
                 >

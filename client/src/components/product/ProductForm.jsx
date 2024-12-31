@@ -33,7 +33,7 @@ export default function ProductForm({ errors, register, product }) {
                         id="form_product_name"
                         placeholder="Ryzen 5 3500u"
                         className="bg-gray-100 p-2 rounded-xl focus:bg-transparent"
-                        value={product?.name}
+                        defaultValue={product?.name}
                         {...register("name")}
                     />
                 </div>
@@ -55,7 +55,7 @@ export default function ProductForm({ errors, register, product }) {
                             id="form_product_brand"
                             placeholder="AMD"
                             className="bg-gray-100 p-2 rounded-xl"
-                            value={product?.brand}
+                            defaultValue={product?.brand}
                             {...register("brand")}
                         />
                     </div>
@@ -71,6 +71,7 @@ export default function ProductForm({ errors, register, product }) {
                             name="category_id"
                             id="form_product_category"
                             className="bg-gray-100 p-2 rounded-xl"
+                            defaultValue={product.category_id}
                             {...register("category_id")}
                         >
                             {data.map((category) => (
@@ -124,7 +125,7 @@ export default function ProductForm({ errors, register, product }) {
                             placeholder="2,000.00"
                             step={0.01}
                             className="bg-gray-100 p-2 rounded-xl"
-                            value={product?.price}
+                            defaultValue={product?.price}
                             {...register("price")}
                         />
                     </div>
@@ -144,7 +145,7 @@ export default function ProductForm({ errors, register, product }) {
                             id="form_product_stock"
                             placeholder="12"
                             className="bg-gray-100 p-2 rounded-xl"
-                            value={product?.stock}
+                            defaultValue={product?.stock}
                             {...register("stock")}
                         />
                     </div>

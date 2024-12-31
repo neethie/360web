@@ -21,7 +21,7 @@ export default function CategoryForm({ errors, register, category }) {
                         id="form_category_name"
                         placeholder="Computadoras gamer"
                         className="bg-gray-100 p-2 rounded-xl focus:bg-transparent"
-                        value={category?.name}
+                        defaultValue={category?.name}
                         {...register("name", {
                             required: "El nombre es obligatorio",
                         })}
@@ -35,13 +35,14 @@ export default function CategoryForm({ errors, register, category }) {
                         Estado
                     </label>
                     <select
-                        name="status"
+                        name="is_disabled"
                         id="form_category_status"
                         className="bg-gray-100 p-2 rounded-xl"
-                        {...register("status")}
+                        defaultValue={category?.is_disabled ? 1 : 0}
+                        {...register("is_disabled")}
                     >
-                        <option value={1}>Habilitada</option>
-                        <option value={0}>Deshabilitada</option>
+                        <option value={0}>Habilitada</option>
+                        <option value={1}>Deshabilitada</option>
                     </select>
                 </div>
                 <input

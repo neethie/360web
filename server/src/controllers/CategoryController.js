@@ -57,15 +57,15 @@ export class CategoryController {
         }
     };
 
-    static delete = async (req, res) => {
+    static updateStatus = async (req, res) => {
         try {
-            const { category_id, name } = req.body;
+            const { category_id, is_disabled } = req.body;
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
                 .input("category_id", sql.Int, category_id)
-                .input("name", sql.VarChar, name)
-                .execute("DeleteCategory");
+                .input("is_disabled", sql.Bit, is_disabled)
+                .execute("UpdateCategoryStatus");
 
             res.send(results.recordset);
         } catch (error) {

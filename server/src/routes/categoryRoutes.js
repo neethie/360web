@@ -30,22 +30,16 @@ router.post(
     CategoryController.create
 );
 
-router.delete(
-    "/delete",
-    oneOf(
-        [
-            body("name").isLength({
-                min: 3,
-            }),
-            body("category_id").isInt({ min: 1 }),
-        ],
-        {
-            message: "Debes incluir el nombre o una id válida",
-        }
-    ),
+router.post(
+    "/update-status",
+
+    body("category_id")
+        .isInt({ min: 1 })
+        .withMessage("El category_id ingresado es inváldio"),
+    body("is_disabled").isInt({ min: 0, max: 1 }).withMessage("Valores 1 o 0"),
 
     handleErrors,
-    CategoryController.delete
+    CategoryController.updateStatus
 );
 
 export default router;
