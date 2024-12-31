@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { useAppStore } from "@/hooks/useAppStore";
+import { AuthAPI } from "@/services/authAPI";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -32,8 +35,20 @@ export default function LoginForm() {
         resolver: yupResolver(loginSchema),
     });
 
+    const navigate = useNavigate();
+
+    const { mutate } = useMutation({
+        mutationFn: AuthAPI.login,
+        onError: (error) => {
+            console.log(error.message);
+        },
+        onSuccess: () => {
+            navigate("/");
+        },
+    });
+
     const handleForm = (data) => {
-        console.log(data);
+        mutate(data);
     };
 
     return (

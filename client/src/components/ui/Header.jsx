@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { ui } from "@/utils/ui";
+
+import { useAuth } from "@/hooks/useAuth";
 
 import { CategoriesAPI } from "@/services/categoriesApi";
 
@@ -11,7 +13,7 @@ import { CiUser } from "react-icons/ci";
 import { CiShoppingCart } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { Popover, PopoverPanel } from "@headlessui/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
 import Logo from "./Logo";
 
@@ -25,6 +27,13 @@ export default function Header() {
         queryFn: CategoriesAPI.getAll,
     });
 
+    const queryClient = useQueryClient();
+    const logout = () => {
+        localStorage.removeItem("AUTH_TOKEN");
+        queryClient.invalidateQueries({ queryKey: ["user"] });
+    };
+
+    const { data: authData } = useAuth();
     if (isLoading) return "Cargando...";
     if (isError) return "Error";
     if (!data) return "No hay categorias";
@@ -128,9 +137,36 @@ export default function Header() {
                         <button>
                             <CiShoppingCart className="w-5 h-5" />
                         </button>
-                        <button>
-                            <CiUser className="w-5 h-5" />
-                        </button>
+                        <Popover className="relative flex items-center font-semibold text-xs">
+                            <PopoverButton>
+                                <CiUser className="w-5 h-5" />
+                            </PopoverButton>
+                            <PopoverPanel
+                                className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-2 z-10 w-max flex flex-col gap-1"
+                                style={{ top: "100%" }}
+                            >
+                                <Link
+                                    to={"/account"}
+                                    className="px-4 py-2 hover:bg-gray-100 rounded-md"
+                                >
+                                    Mi cuenta
+                                </Link>
+                                {authData.rol_id !== 1 && (
+                                    <Link
+                                        to={"/admin"}
+                                        className="px-4 py-2 hover:bg-gray-100 rounded-md"
+                                    >
+                                        Administrador
+                                    </Link>
+                                )}
+                                <button
+                                    onClick={logout}
+                                    className="px-4 py-2 hover:bg-red-400 rounded-md bg-red-300 text-white"
+                                >
+                                    Cerrar Sesión
+                                </button>
+                            </PopoverPanel>
+                        </Popover>
                     </div>
                 </>
             )}

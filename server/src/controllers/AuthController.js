@@ -74,7 +74,14 @@ export class AuthController {
                 });
                 return;
             }
-            const token = generateJWT(result.recordset[0].user_id);
+
+            const tokenData = await pool
+                .request()
+                .input("user_id", sql.Int, result.recordset[0].user_id)
+                .query(
+                    "SELECT user_id, email, rol_id, full_name FROM users WHERE user_id = @user_id"
+                );
+            const token = generateJWT(tokenData.recordset[0]);
             res.send(token);
         } catch (error) {
             res.status(500).json({
@@ -82,5 +89,9 @@ export class AuthController {
             });
             console.error(error);
         }
+    };
+
+    static user = async (req, res) => {
+        return res.json(req.user);
     };
 }

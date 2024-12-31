@@ -8,7 +8,9 @@ import { authenticate } from "../middleware/auth.js";
 const router = Router();
 
 router.get("/count", CategoryController.getCount);
+
 router.get("/", CategoryController.getAll);
+
 router.get(
     "/:category_id",
     param("category_id")
@@ -17,6 +19,7 @@ router.get(
     handleErrors,
     CategoryController.getById
 );
+
 router.post(
     "/create",
     authenticate,

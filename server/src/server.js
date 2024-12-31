@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import morgan from "morgan";
 
 import { corsConfig } from "./config/cors.js";
 
@@ -16,6 +17,7 @@ dotenv.config();
 const server = express();
 
 server.use(cors(corsConfig));
+server.use(morgan("dev"));
 server.use(express.json());
 
 // ————— Rutas

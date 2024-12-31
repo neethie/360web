@@ -23,14 +23,12 @@ export const authenticate = async (req, res, next) => {
         const pool = await sql.connect(sqlConfig);
         const response = await pool
             .request()
-            .input("user_id", sql.Int, decoded.data)
-            .query(
-                "SELECT user_id, email, full_name FROM users WHERE user_id = @user_id"
-            );
+            .input("user_id", sql.Int, decoded.data.user_id)
+            .query("SELECT user_id FROM users WHERE user_id = @user_id");
 
         if (response.recordset.length) {
             req.user = decoded.data;
-            return;
+            return next();
         }
         res.status(500).json({
             error: "Token inválido",

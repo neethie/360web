@@ -3,6 +3,7 @@ import { body, param } from "express-validator";
 
 import { AuthController } from "../controllers/AuthController.js";
 import { handleErrors } from "../middleware/validation.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -28,5 +29,7 @@ router.post(
     handleErrors,
     AuthController.login
 );
+
+router.get("/user", authenticate, AuthController.user);
 
 export default router;
