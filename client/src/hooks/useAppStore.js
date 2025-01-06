@@ -44,9 +44,25 @@ export const useAppStore = create()(
         },
 
         cart: [],
-        setCart: (data) => {
+        addToCart: (product) => {
             set((state) => ({
-                cart: [...state.cart, data],
+                cart: [...state.cart, product],
+            }));
+        },
+        updateQuantity: (product_id, quantity) => {
+            set((state) => ({
+                cart: state.cart.map((item) =>
+                    item.product_id === product_id
+                        ? { ...item, quantity }
+                        : item
+                ),
+            }));
+        },
+        updateCart: (product) => {
+            set((state) => ({
+                cart: state.cart.map((item) => {
+                    item.product_id === product.product_id ? product : item;
+                }),
             }));
         },
         removeFromCart: (product_id) => {

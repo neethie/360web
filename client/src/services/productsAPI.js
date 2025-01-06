@@ -1,5 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "@/utils/axios";
+import { useProductStore } from "../hooks/useProductStore";
 
 export class ProductsAPI {
     static countAll = async () => {
@@ -17,6 +18,7 @@ export class ProductsAPI {
         try {
             const url = "/products";
             const { data } = await api(url);
+            useProductStore.getState().setProductsStore(data);
             return data;
         } catch (error) {
             if (isAxiosError(error))

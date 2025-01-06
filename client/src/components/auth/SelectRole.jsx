@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAppStore } from "../../hooks/useAppStore";
+import { useAppStore } from "@/hooks/useAppStore";
 
 export default function SelectRole() {
     const { setSelectRole } = useAppStore();
@@ -9,7 +9,7 @@ export default function SelectRole() {
     };
 
     return (
-        <div className="flex items-center justify-center w-screen h-screen absolute">
+        <div className="flex items-center justify-center w-screen h-screen absolute bg-black bg-opacity-80">
             <div className="bg-white z-20 p-8 space-y-4 rounded-3xl">
                 <p className="text-lg font-semibold text-center">
                     Elige el rol a usar

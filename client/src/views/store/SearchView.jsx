@@ -7,8 +7,9 @@ import ProductCard from "@/components/product/ProductCard";
 
 import { ProductsAPI } from "@/services/productsAPI";
 import { CategoriesAPI } from "@/services/categoriesAPI";
-import { useAppStore } from "../../hooks/useAppStore";
-import { setSearchQuery } from "../../utils/search";
+import { useAppStore } from "@/hooks/useAppStore";
+import { setSearchQuery } from "@/utils/search";
+import { useProductStore } from "@/hooks/useProductStore";
 
 export default function SearchView() {
     const location = useLocation();
@@ -22,12 +23,15 @@ export default function SearchView() {
             max_price: 10000,
         },
     });
-
+    const { setProductsStore } = useProductStore();
     const results = useQueries({
         queries: [
             {
                 queryKey: ["loadAvailableProducts"],
                 queryFn: ProductsAPI.getAll,
+                onSuccess: (data) => {
+                    setProductsStore(data); // Ejecutar solo cuando hay nuevos datos
+                },
             },
             {
                 queryKey: ["loadCategories"],
@@ -121,7 +125,7 @@ export default function SearchView() {
                             step={5}
                             name="min_price"
                             id="min_price"
-                            value={watch("min_p rice")}
+                            value={watch("min_price")}
                             {...register("min_price")}
                         />
                     </div>
@@ -172,7 +176,7 @@ export default function SearchView() {
                         ? `Resultados de la busqueda: '${search.name}'`
                         : "Nuestros productos"}
                 </p>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {!location.search
                         ? products.data.map((product) => (
                               <ProductCard

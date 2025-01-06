@@ -1,12 +1,15 @@
 import ProductCard from "@/components/product/ProductCard";
 import { ProductsAPI } from "@/services/productsAPI";
 import { useQuery } from "@tanstack/react-query";
+import Button from "../../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function MainView() {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["loadTopProducts"],
         queryFn: ProductsAPI.getTop,
     });
+    const navigate = useNavigate();
 
     if (isLoading) return "Cargando...";
     if (isError) return "Hubo un error (loadTopProducts)";
@@ -24,9 +27,13 @@ export default function MainView() {
                         Lo que necesitás{" "}
                         <span className="italic underline">en un click</span>
                     </p>
-                    <button className="bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-2 rounded-xl w-max self-end">
-                        Ver productos
-                    </button>
+                    <div className="self-end">
+                        <Button
+                            text={"Ver productos"}
+                            handle={() => navigate("/search")}
+                            classname={"bg-orange-400"}
+                        />
+                    </div>
                 </div>
             </div>
 

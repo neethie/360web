@@ -17,6 +17,8 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
+import ProductCartCard from "../cart/ProductCartCard";
+import { useAppStore } from "../../hooks/useAppStore";
 
 export default function Header() {
     const [isHovered, setIsHovered] = useState(false);
@@ -29,6 +31,8 @@ export default function Header() {
     });
 
     const { data: authData } = useAuth();
+
+    const { cart } = useAppStore();
 
     const queryClient = useQueryClient();
 
@@ -51,9 +55,42 @@ export default function Header() {
                     <button>
                         <IoIosMenu />
                     </button>
-                    <button>
-                        <CiShoppingCart className="w-5 h-5" />
-                    </button>
+                    <Popover className="relative flex items-center font-semibold text-xs">
+                        <PopoverButton>
+                            <CiShoppingCart className="w-5 h-5" />
+                        </PopoverButton>
+                        <PopoverPanel
+                            className="absolute -left-12 mt-2 bg-white shadow-lg rounded-md p-2 z-10 w-max flex flex-col gap-1"
+                            style={{ top: "100%" }}
+                        >
+                            <div className="">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <p>Producto</p>
+                                            </th>
+                                            <th>
+                                                <p>Cantidad</p>
+                                            </th>
+                                            <th>
+                                                <p>Subtotal</p>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ProductCartCard />
+                                    </tbody>
+                                </table>
+                            </div>
+                            <Link
+                                to={"/cart"}
+                                className="px-4 py-2 bg-blue-300 hover:bg-blue-400 rounded-md text-center text-white"
+                            >
+                                Checkout
+                            </Link>
+                        </PopoverPanel>
+                    </Popover>
                     <button>
                         <CiUser className="w-5 h-5" />
                     </button>
@@ -133,12 +170,50 @@ export default function Header() {
                                 className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-2 z-10 w-max flex flex-col gap-1"
                                 style={{ top: "100%" }}
                             >
-                                <Link
-                                    to={"/cart"}
-                                    className="px-4 py-2 bg-blue-300 hover:bg-blue-400 rounded-md"
-                                >
-                                    Checkout
-                                </Link>
+                                {cart.length ? (
+                                    <>
+                                        <div className="">
+                                            <table className="w-full table-auto border-separate border-spacing-y-2">
+                                                <thead>
+                                                    <tr className="text-center">
+                                                        <th className="w-48">
+                                                            Producto
+                                                        </th>
+                                                        <th className="w-24">
+                                                            Cantidad
+                                                        </th>
+                                                        <th className="w-24">
+                                                            Subtotal
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <>
+                                                        {cart.map((item) => (
+                                                            <ProductCartCard
+                                                                key={
+                                                                    item.product_id
+                                                                }
+                                                                productCart={
+                                                                    item
+                                                                }
+                                                            />
+                                                        ))}
+                                                    </>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <Link
+                                            to={"/cart"}
+                                            className="px-4 py-2 bg-blue-300 hover:bg-blue-400 rounded-md text-center text-white"
+                                        >
+                                            Checkout
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <p>No hay productos en el carrito</p>
+                                )}
                             </PopoverPanel>
                         </Popover>
                         <Popover className="relative flex items-center font-semibold text-xs">

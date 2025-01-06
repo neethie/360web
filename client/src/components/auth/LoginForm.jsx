@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { AuthAPI } from "@/services/authAPI";
+import { useAppStore } from "@/hooks/useAppStore";
 
 const loginSchema = yup.object().shape({
     email: yup
@@ -32,16 +33,19 @@ export default function LoginForm() {
         resolver: yupResolver(loginSchema),
     });
 
+    const { setSelectRole } = useAppStore();
     const queryClient = useQueryClient();
-
     const { mutate } = useMutation({
         mutationFn: AuthAPI.login,
         onError: (error) => {
             toast.error(error.message);
         },
         onSuccess: () => {
-            queryClient.refetchQueries(["user"]);
-            navigate("/");
+            queryClient.refetchQueries(["user"]).then(() => {
+                const data = queryClient.getQueryData(["user"]);
+                if (data.rol_id === 1) return navigate("/");
+                setSelectRole(true);
+            });
         },
     });
 

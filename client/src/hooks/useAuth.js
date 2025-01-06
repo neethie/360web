@@ -8,6 +8,5 @@ export const useAuth = () => {
         retry: 1,
         refetchOnWindowFocus: false,
     });
-
     return { data, isError, isLoading };
 };
