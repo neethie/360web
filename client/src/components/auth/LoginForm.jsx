@@ -1,32 +1,29 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import { useAppStore } from "@/hooks/useAppStore";
 import { AuthAPI } from "@/services/authAPI";
 
 const loginSchema = yup.object().shape({
     email: yup
         .string()
         .email("El email es inválido")
-        .required("El email es requerido"),
+        .required("El email es requerido")
+        .default(""),
     password: yup
         .string()
         .min(5, "La contraseña debe tener un mínimo de 5 caracteres")
         .max(30, "La contraseña debe tener un máximo de 30 caracteres")
-        .required("La contraseña es requerida"),
+        .required("La contraseña es requerida")
+        .default(""),
 });
 
 export default function LoginForm() {
-    const { setAuthForm, authForm } = useAppStore();
-
-    const handleClick = () => {
-        setAuthForm(!authForm);
-    };
-
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -35,14 +32,15 @@ export default function LoginForm() {
         resolver: yupResolver(loginSchema),
     });
 
-    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationFn: AuthAPI.login,
         onError: (error) => {
-            console.log(error.message);
+            toast.error(error.message);
         },
         onSuccess: () => {
+            queryClient.refetchQueries(["user"]);
             navigate("/");
         },
     });
@@ -53,60 +51,39 @@ export default function LoginForm() {
 
     return (
         <>
-            <div className="bg-white p-8 rounded-xl">
-                <h3 className="font-semibold text-3xl text-center">
-                    ¡Bienvenido de vuelta!
-                </h3>
-                <p className="text-gray-500 text-center">
-                    Ingresa tus credenciales para iniciar sesión en tu cuenta
-                </p>
-
-                <form
-                    onSubmit={handleSubmit(handleForm)}
-                    noValidate
-                    className="my-2 space-y-4"
-                >
-                    <div className="space-y-2">
-                        {errors.email && (
-                            <ErrorMessage>{errors.email.message}</ErrorMessage>
-                        )}
-                        <input
-                            type="text"
-                            placeholder="Ingresa tu email"
-                            className="border py-2 px-4 w-full rounded-xl"
-                            {...register("email")}
-                        />
-                        {errors.password && (
-                            <ErrorMessage>
-                                {errors.password.message}
-                            </ErrorMessage>
-                        )}
-                        <input
-                            type="password"
-                            placeholder="Contraseña"
-                            className="border py-2 px-4 w-full rounded-xl"
-                            {...register("password")}
-                        />
-                    </div>
+            <form
+                onSubmit={handleSubmit(handleForm)}
+                noValidate
+                className="my-2 space-y-4 w-2/3"
+            >
+                <div className="space-y-2">
+                    {errors.email && (
+                        <ErrorMessage>{errors.email.message}</ErrorMessage>
+                    )}
                     <input
-                        type="submit"
-                        value="Iniciar sesión"
-                        className="border py-2 px-4 w-full rounded-xl bg-blue-400 text-white opacity-80 hover:opacity-100 cursor-pointer"
+                        type="text"
+                        id="form_login_email"
+                        placeholder="Ingresa tu email"
+                        className="border py-2 px-4 w-full rounded-xl"
+                        {...register("email")}
                     />
-                </form>
-            </div>
-            <div className="bg-blue-400 opacity-80 p-4 rounded-xl text-white flex flex-col items-center justify-center">
-                <p className="font-semibold text-xl">¿No tienes cuenta?</p>
-                <p className="text-sm font-semibold">
-                    <button
-                        onClick={handleClick}
-                        className="hover:text-blue-900 transition-all"
-                    >
-                        Click aqui
-                    </button>{" "}
-                    para registrarte
-                </p>
-            </div>
+                    {errors.password && (
+                        <ErrorMessage>{errors.password.message}</ErrorMessage>
+                    )}
+                    <input
+                        type="password"
+                        id="form_login_password"
+                        placeholder="Contraseña"
+                        className="border py-2 px-4 w-full rounded-xl"
+                        {...register("password")}
+                    />
+                </div>
+                <input
+                    type="submit"
+                    value="Iniciar sesión"
+                    className="border py-2 px-4 w-full rounded-xl bg-blue-400 text-white opacity-80 hover:opacity-100 cursor-pointer"
+                />
+            </form>
         </>
     );
 }

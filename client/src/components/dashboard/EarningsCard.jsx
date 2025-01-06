@@ -16,8 +16,12 @@ export default function EarningsCard() {
 
     return (
         <div className="">
-            <p className="text-sm">Mes de {monthsString[date.getMonth()]}</p>
-            <p className="font-black text-2xl text-green-600">Q{data[0][""]}</p>
+            <p className="text-sm">
+                Mes de {monthsString[date.getMonth()]}, {date.getFullYear()}
+            </p>
+            <p className="font-black text-2xl text-green-600">
+                Q{data[0][""] ? data[0][""] : "0.00"}
+            </p>
         </div>
     );
 }

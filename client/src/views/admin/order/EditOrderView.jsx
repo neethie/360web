@@ -25,8 +25,8 @@ export default function EditOrderView() {
     const orderDetails = results[1];
 
     if (order.isLoading || orderDetails.isLoading) return "cargando...";
-    if (order.isError || orderDetails.isError) return "Hubo un error";
-    if (!order.data || !orderDetails.data) return "No hay datos";
+    if (order.isError) return "Hubo un error";
+    if (!order.data) return "No hay datos";
 
     return (
         <>
@@ -64,12 +64,18 @@ export default function EditOrderView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {orderDetails.data.map((detail) => (
-                        <OrderDetailRow
-                            key={detail.order_details_id}
-                            detail={detail}
-                        />
-                    ))}
+                    {orderDetails.data ? (
+                        <>
+                            {orderDetails.data.map((detail) => (
+                                <OrderDetailRow
+                                    key={detail.order_details_id}
+                                    detail={detail}
+                                />
+                            ))}
+                        </>
+                    ) : (
+                        "No hay datos para mostrar"
+                    )}
                 </tbody>
             </table>
         </>

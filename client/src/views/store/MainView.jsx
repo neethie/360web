@@ -1,33 +1,15 @@
 import ProductCard from "@/components/product/ProductCard";
-
-const ProductsTemp = [
-    {
-        product_id: 1,
-        name: "Laptop Gamer",
-        brand: "ASUS",
-        price: 3200,
-    },
-    {
-        product_id: 2,
-        name: "Monitor Ultra HD",
-        brand: "Samsung",
-        price: 1500,
-    },
-    {
-        product_id: 3,
-        name: "Teclado Mecánico RGB",
-        brand: "Logitech",
-        price: 200,
-    },
-    {
-        product_id: 4,
-        name: "Mouse Inalámbrico",
-        brand: "Razer",
-        price: 180,
-    },
-];
+import { ProductsAPI } from "@/services/productsAPI";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MainView() {
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["loadTopProducts"],
+        queryFn: ProductsAPI.getTop,
+    });
+
+    if (isLoading) return "Cargando...";
+    if (isError) return "Hubo un error (loadTopProducts)";
     return (
         <>
             <div className="bg-orange-300 text-white grid grid-cols-[2fr_1fr] items-center md:mb-24">
@@ -39,11 +21,11 @@ export default function MainView() {
 
                 <div className="space-y-2 flex flex-col p-4">
                     <p className="md:text-7xl font-bold text-center md:text-left md:-translate-x-40 cursor-default transition-all">
-                        La potencia que necesitás{" "}
-                        <span className="italic underline">día con día</span>
+                        Lo que necesitás{" "}
+                        <span className="italic underline">en un click</span>
                     </p>
                     <button className="bg-orange-500 bg-opacity-80 hover:bg-opacity-100 text-white p-2 rounded-xl w-max self-end">
-                        Ver laptops
+                        Ver productos
                     </button>
                 </div>
             </div>
@@ -56,10 +38,13 @@ export default function MainView() {
                         </p>
                     </div>
                     <div className="grid md:grid-cols-4 grid-rows-1 justify-items-center min-w-0">
-                        <ProductCard product={ProductsTemp[0]} />
-                        <ProductCard product={ProductsTemp[1]} />
-                        <ProductCard product={ProductsTemp[2]} />
-                        <ProductCard product={ProductsTemp[3]} />
+                        {Array.isArray(data) &&
+                            data.map((product) => (
+                                <ProductCard
+                                    key={product.product_id}
+                                    product={product}
+                                />
+                            ))}
                     </div>
                 </section>
             </div>

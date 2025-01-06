@@ -8,7 +8,7 @@ export class UserController {
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
-                .query("SELECT COUNT(*) FROM users WHERE is_disabled = 0");
+                .query("SELECT COUNT(*) FROM users");
 
             res.send(results.recordset);
         } catch (error) {
@@ -101,6 +101,26 @@ export class UserController {
                     "Ha ocurrido un error al intentar actualizar los datos del usuario",
             });
             console.log(error);
+        }
+    };
+
+    static updateStatus = async (req, res) => {
+        try {
+            const { user_id, is_disabled } = req.body;
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .input("user_id", sql.Int, user_id)
+                .input("is_disabled", sql.Int, is_disabled)
+                .query(
+                    "UPDATE users SET is_disabled = @is_disabled WHERE user_id = @user_id"
+                );
+            res.send("Se ha modificado un usuario");
+        } catch (error) {
+            res.status(500).json({
+                message:
+                    "Ha ocurrido un error al intentar actualizar el estado de un usuario",
+            });
         }
     };
 }

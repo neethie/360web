@@ -3,10 +3,22 @@ import { Router } from "express";
 import { OrderController } from "../controllers/OrderController.js";
 import { param, body } from "express-validator";
 import { handleErrors } from "../middleware/validation.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(authenticate);
+
 router.get("/earnings", OrderController.getEarnings);
 router.get("/count", OrderController.getCount);
+router.get(
+    "/user/:user_id",
+    param("user_id")
+        .isInt({ min: 1 })
+        .withMessage("El user_id ingresado no es válido"),
+    handleErrors,
+    OrderController.getByUserId
+);
 router.get("/", OrderController.getAll);
 router.get(
     "/:order_id",

@@ -8,7 +8,15 @@ import { generateJWT } from "../utils/jwt.js";
 export class AuthController {
     static register = async (req, res) => {
         try {
-            const { email, password, full_name, phone, birthday } = req.body;
+            const {
+                email,
+                password,
+                full_name,
+                phone,
+                birthday,
+                rol_id,
+                address,
+            } = req.body;
             const pool = await sql.connect(sqlConfig);
             const checkEmail = await pool
                 .request()
@@ -30,6 +38,8 @@ export class AuthController {
                 .input("full_name", sql.VarChar, full_name)
                 .input("phone", sql.VarChar, phone)
                 .input("birthday", sql.DateTime, birthday)
+                .input("rol_id", sql.Int, rol_id)
+                .input("address", sql.VarChar, address)
                 .execute("CreateUser");
 
             res.send("Cuenta registrada");
@@ -48,9 +58,7 @@ export class AuthController {
             const result = await pool
                 .request()
                 .input("email", sql.VarChar, email)
-                .query(
-                    "SELECT user_id, password, is_disabled FROM users WHERE email = @email"
-                );
+                .query("SELECT * FROM users WHERE email = @email");
 
             if (result.recordset.length === 0) {
                 res.status(409).json({
@@ -74,14 +82,8 @@ export class AuthController {
                 });
                 return;
             }
-
-            const tokenData = await pool
-                .request()
-                .input("user_id", sql.Int, result.recordset[0].user_id)
-                .query(
-                    "SELECT user_id, email, rol_id, full_name FROM users WHERE user_id = @user_id"
-                );
-            const token = generateJWT(tokenData.recordset[0]);
+            const { user_id } = result.recordset[0];
+            const token = generateJWT({ user_id });
             res.send(token);
         } catch (error) {
             res.status(500).json({
@@ -92,6 +94,6 @@ export class AuthController {
     };
 
     static user = async (req, res) => {
-        return res.json(req.user);
+        return res.send(req.user);
     };
 }

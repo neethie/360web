@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 
 import AdminAside from "@/components/ui/AdminAside";
+import { ToastContainer, Bounce } from "react-toastify";
 import { IoIosMenu } from "react-icons/io";
 
 import { ui } from "@/utils/ui";
@@ -16,6 +17,7 @@ export default function AdminLayout() {
     const { data, isError, isLoading } = useAuth();
     if (isLoading) return "Cargando...";
     if (isError) return <Navigate to="/" />;
+    if (!data) return <Navigate to="/auth" />;
     if (data.rol_id === 1) return <Navigate to="/" />;
 
     return (
@@ -34,6 +36,19 @@ export default function AdminLayout() {
                     <Outlet />
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
         </>
     );
 }

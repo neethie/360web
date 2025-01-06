@@ -1,17 +1,27 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import ProductCard from "@/components/product/ProductCard";
 
 import { ProductsAPI } from "@/services/productsAPI";
 import { CategoriesAPI } from "@/services/categoriesAPI";
+import { useAppStore } from "../../hooks/useAppStore";
+import { setSearchQuery } from "../../utils/search";
 
 export default function SearchView() {
-    const defaultValues = {
-        category_id: 1,
-        min_price: 0,
-        max_price: 10000,
-    };
+    const location = useLocation();
+
+    const { search, setSearch } = useAppStore();
+
+    const { register, handleSubmit, watch, reset } = useForm({
+        defaultValues: {
+            category_id: -1,
+            min_price: 0,
+            max_price: 10000,
+        },
+    });
 
     const results = useQueries({
         queries: [
@@ -23,17 +33,30 @@ export default function SearchView() {
                 queryKey: ["loadCategories"],
                 queryFn: CategoriesAPI.getAll,
             },
+            {
+                queryKey: ["searchProducts", search],
+                queryFn: () => ProductsAPI.searchBy(search),
+            },
         ],
     });
+
     const products = results[0];
     const categories = results[1];
+    const productsSearch = results[2];
 
-    const { register, handleSubmit, watch } = useForm({
-        defaultValues,
-    });
+    const navigate = useNavigate();
+
+    const queryClient = useQueryClient();
 
     const handleForm = (data) => {
-        console.log(data);
+        const newSearch = {
+            ...search,
+            ...data,
+            category_id: parseInt(data.category_id),
+        };
+        navigate(`/search?${setSearchQuery(newSearch)}`);
+        setSearch(newSearch);
+        queryClient.invalidateQueries(["searchProducts", newSearch]);
     };
 
     if (products.isLoading || categories.isLoading) return "Cargando...";
@@ -50,6 +73,17 @@ export default function SearchView() {
 
                 <div className="flex flex-col p-2">
                     <p className="font-semibold">Categorias</p>
+                    <div className="flex justify-between items-center px-2">
+                        <label>Todo</label>
+                        <input
+                            type="radio"
+                            name="all"
+                            id="category_all"
+                            value={-1}
+                            defaultChecked
+                            {...register("category_id")}
+                        />
+                    </div>
 
                     {categories.data.map((category) => (
                         <div
@@ -58,7 +92,7 @@ export default function SearchView() {
                         >
                             <label>{category.name}</label>
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name={category.name}
                                 id={category.name}
                                 value={category.category_id}
@@ -87,7 +121,7 @@ export default function SearchView() {
                             step={5}
                             name="min_price"
                             id="min_price"
-                            value={watch("min_price")}
+                            value={watch("min_p rice")}
                             {...register("min_price")}
                         />
                     </div>
@@ -112,25 +146,46 @@ export default function SearchView() {
                             {...register("max_price")}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="bg-blue-400 opacity-80 hover:opacity-100 text-white mx-2"
-                    >
-                        Buscar
-                    </button>
+                    <div className="flex flex-col gap-1">
+                        <button
+                            type="submit"
+                            className="bg-blue-400 opacity-80 hover:opacity-100 text-white mx-2"
+                        >
+                            Buscar
+                        </button>
+                        <button
+                            type="submit"
+                            onClick={() => {
+                                reset();
+                                navigate("/search");
+                            }}
+                            className="bg-red-400 opacity-80 hover:opacity-100 text-white mx-2"
+                        >
+                            Limpiar
+                        </button>
+                    </div>
                 </div>
             </form>
             <main className="space-y-2 pr-8">
                 <p className="text-2xl font-semibold">
-                    Resultados de la búsqueda
+                    {search.name.length > 0
+                        ? `Resultados de la busqueda: '${search.name}'`
+                        : "Nuestros productos"}
                 </p>
                 <div className="grid grid-cols-3 gap-4">
-                    {products.data.map((product) => (
-                        <ProductCard
-                            key={product.product_id}
-                            product={product}
-                        />
-                    ))}
+                    {!location.search
+                        ? products.data.map((product) => (
+                              <ProductCard
+                                  key={product.product_id}
+                                  product={product}
+                              />
+                          ))
+                        : productsSearch.data?.map((product) => (
+                              <ProductCard
+                                  key={product.product_id}
+                                  product={product}
+                              />
+                          ))}
                 </div>
             </main>
         </div>

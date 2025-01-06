@@ -3,8 +3,11 @@ import { Router } from "express";
 import { DetailController } from "../controllers/DetailController.js";
 import { param, body, oneOf } from "express-validator";
 import { handleErrors } from "../middleware/validation.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get(
     "/:order_id",

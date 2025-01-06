@@ -3,8 +3,11 @@ import { body, oneOf, param } from "express-validator";
 
 import { UserController } from "../controllers/UserController.js";
 import { handleErrors } from "../middleware/validation.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get("/count", UserController.getCount);
 router.get("/", UserController.getAll);
@@ -45,6 +48,18 @@ router.patch(
 
     handleErrors,
     UserController.update
+);
+
+router.patch(
+    "/update-status",
+    body("user_id")
+        .isInt({ min: 1 })
+        .withMessage("El user_id ingresado es inválido"),
+
+    body("is_disabled").isBoolean().withMessage("Debe ser 1 o 0"),
+
+    handleErrors,
+    UserController.updateStatus
 );
 
 export default router;

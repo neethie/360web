@@ -1,10 +1,27 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
+import { CategoriesAPI } from "@/services/categoriesAPI";
 
 import { formSchema } from "./formSchema";
 import CategoryForm from "@/components/category/CategoryForm";
+import { toast } from "react-toastify";
 
 export default function CreateCategoryView() {
+    const navigate = useNavigate();
+    const { mutate } = useMutation({
+        mutationFn: CategoriesAPI.create,
+        onSuccess: () => {
+            toast.success("Se ha creado una categoria");
+            navigate("/admin/categories");
+        },
+        onError: (error) => {
+            toast.error(error);
+        },
+    });
+
     const {
         register,
         handleSubmit,
@@ -14,7 +31,7 @@ export default function CreateCategoryView() {
     });
 
     const handleForm = (data) => {
-        console.log(data);
+        mutate(data);
     };
     return (
         <>

@@ -28,4 +28,14 @@ export class UsersAPI {
             console.error(error);
         }
     };
+
+    static updateStatus = async (userData) => {
+        try {
+            const url = `/users/update-status/`;
+            const { data } = await api.patch(url, userData);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }

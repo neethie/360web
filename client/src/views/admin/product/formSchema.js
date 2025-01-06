@@ -22,4 +22,5 @@ export const formSchema = yup.object().shape({
         .max(500, "Máximo 500")
         .required("El stock es requerido"),
     category_id: yup.number(),
+    image: yup.mixed(),
 });

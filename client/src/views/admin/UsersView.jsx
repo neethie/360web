@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 import { UsersAPI } from "@/services/usersAPI";
-import UserRow from "../../components/user/UserRow";
+
+import UserRow from "@/components/user/UserRow";
+import Button from "@/components/ui/Button";
 
 export default function Users() {
     const { data, isLoading, isError, error } = useQuery({
@@ -15,9 +18,16 @@ export default function Users() {
 
     return (
         <div className="space-y-6">
-            <div className="">
-                <h2 className="font-semibold text-3xl">Todos los usuarios</h2>
-                <p>{data.length} en total</p>
+            <div className="flex justify-between items-center">
+                <div className="">
+                    <h2 className="font-semibold text-3xl">
+                        Todos los usuarios
+                    </h2>
+                    <p>{data.length} en total</p>
+                </div>
+                <Link to={"create"}>
+                    <Button text={"Crear"} classname={"bg-blue-600"} />
+                </Link>
             </div>
             <table className="w-full p-2 border-spacing-y-12">
                 <thead>

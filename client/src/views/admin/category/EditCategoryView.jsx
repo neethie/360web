@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 import CategoryForm from "@/components/category/CategoryForm";
 
@@ -9,6 +10,23 @@ import { formSchema } from "./formSchema";
 import { CategoriesAPI } from "@/services/categoriesAPI";
 
 export default function EditCategoryView() {
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: CategoriesAPI.update,
+        onSuccess: () => {
+            toast.success("Se ha editado una categoria");
+            queryClient.invalidateQueries({ queryKey: ["loadCategories"] });
+            queryClient.invalidateQueries({
+                queryKey: ["getCategory", category_id],
+            });
+            navigate("/admin/categories");
+        },
+        onError: (error) => {
+            toast.error(error);
+        },
+    });
+
     const {
         register,
         handleSubmit,
@@ -17,11 +35,12 @@ export default function EditCategoryView() {
         resolver: yupResolver(formSchema),
     });
 
-    const handleForm = (data) => {
-        console.log(data);
-    };
-
     const { category_id } = useParams();
+
+    const handleForm = (data) => {
+        data = { ...data, category_id };
+        mutate(data);
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ["getCategory", category_id],

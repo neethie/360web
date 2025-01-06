@@ -1,6 +1,6 @@
 import ResumeCard from "@/components/dashboard/ResumeCard";
 import { Resume } from "@/utils/constants";
-import EarningsCard from "../../components/dashboard/EarningsCard";
+import EarningsCard from "@/components/dashboard/EarningsCard";
 
 export default function DashboardView() {
     return (

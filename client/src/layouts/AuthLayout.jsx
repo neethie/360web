@@ -1,18 +1,31 @@
 import { useAppStore } from "@/hooks/useAppStore";
 
-import LoginForm from "@/components/auth/LoginForm";
-import RegisterForm from "@/components/auth/RegisterForm";
+import { ToastContainer, Bounce } from "react-toastify";
+
+import LoginView from "@/views/auth/LoginView";
+import RegisterView from "@/views/auth/RegisterView";
 
 export default function AuthLayout() {
     const { authForm } = useAppStore();
 
     return (
         <>
-            <div className="flex items-center justify-center h-screen bg-gray-100 flex-col gap-5">
-                <div className="flex bg-white rounded-xl shadow-lg">
-                    {authForm === 0 ? <LoginForm /> : <RegisterForm />}
-                </div>
+            <div className="">
+                {authForm === 0 ? <LoginView /> : <RegisterView />}
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+            />
         </>
     );
 }

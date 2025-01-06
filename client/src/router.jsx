@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import AuthLayout from "@/layouts/AuthLayout";
 import StoreLayout from "@/layouts/StoreLayout";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -17,6 +18,7 @@ import EditProductView from "@/views/admin/product/EditProductView";
 import CreateProductView from "@/views/admin/product/CreateProductView";
 
 import UsersView from "@/views/admin/UsersView";
+import CreateUserView from "@/views/admin/user/CreateUserView";
 import EditUserView from "@/views/admin/user/EditUserView";
 
 import ConfigView from "@/views/admin/ConfigView";
@@ -24,20 +26,26 @@ import ConfigView from "@/views/admin/ConfigView";
 import MainView from "@/views/store/MainView";
 import SearchView from "@/views/store/SearchView";
 import ContactView from "@/views/store/ContactView";
+import CartView from "@/views/store/CartView";
+import AccountView from "@/views/store/AccountView";
 
 export default function Router() {
     return (
         <BrowserRouter>
             <Routes>
+                {/* Tienda */}
                 <Route path="/" element={<StoreLayout />}>
                     <Route index element={<MainView />} />
-
                     <Route path="search" element={<SearchView />} />
                     <Route path="contact" element={<ContactView />} />
+                    <Route path="cart" element={<CartView />} />
+                    <Route path="account" element={<AccountView />} />
                 </Route>
 
+                {/* Auth */}
                 <Route path="auth" element={<AuthLayout />} />
 
+                {/* Admin */}
                 <Route path="admin" element={<AdminLayout />}>
                     <Route index element={<DashboardView />} />
                     <Route path="config" element={<ConfigView />} />
@@ -70,6 +78,7 @@ export default function Router() {
                             path="edit/:user_id"
                             element={<EditUserView />}
                         />
+                        <Route path="create" element={<CreateUserView />} />
                     </Route>
                 </Route>
             </Routes>

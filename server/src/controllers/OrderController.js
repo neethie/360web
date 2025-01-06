@@ -1,10 +1,13 @@
 import sql from "mssql";
 
 import { sqlConfig } from "../data/connection.js";
+import { checkPermissions } from "../middleware/permissions.js";
 
 export class OrderController {
     static getEarnings = async (req, res) => {
         try {
+            checkPermissions(req, res, 2);
+
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
@@ -22,6 +25,8 @@ export class OrderController {
     };
     static getCount = async (req, res) => {
         try {
+            checkPermissions(req, res, 2);
+
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
@@ -37,6 +42,8 @@ export class OrderController {
     };
     static getAll = async (req, res) => {
         try {
+            checkPermissions(req, res, 2);
+
             const pool = await sql.connect(sqlConfig);
             const results = await pool.request().execute("LoadOrders");
 
@@ -47,6 +54,28 @@ export class OrderController {
                 return;
             }
 
+            res.send(results.recordset);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener todas las ordenes",
+            });
+            console.error(error);
+        }
+    };
+
+    static getByUserId = async (req, res) => {
+        try {
+            const { user_id } = req.params;
+            console.log(user_id);
+            console.log(req.user.user_id);
+            if (user_id != req.user.user_id)
+                return res.status(401).json({ error: "No autorizado" });
+
+            const pool = await sql.connect(sqlConfig);
+            const results = await pool
+                .request()
+                .input("user_id", sql.Int, user_id)
+                .execute("LoadOrdersByUser");
             res.send(results.recordset);
         } catch (error) {
             res.status(500).json({
@@ -83,20 +112,8 @@ export class OrderController {
 
     static create = async (req, res) => {
         try {
-            const { user_id } = req.body;
+            const { user_id } = req.user;
             const pool = await sql.connect(sqlConfig);
-
-            const checkUser = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .query("SELECT user_id FROM users WHERE user_id = @user_id");
-
-            if (!checkUser.recordset.length) {
-                res.status(404).json({
-                    error: "No existe ese user_id",
-                });
-                return;
-            }
 
             const results = await pool
                 .request()
@@ -114,6 +131,8 @@ export class OrderController {
 
     static updateStatus = async (req, res) => {
         try {
+            checkPermissions(req, res, 2);
+
             const { order_id, status } = req.body;
             const pool = await sql.connect(sqlConfig);
             const checkOrder = await pool
