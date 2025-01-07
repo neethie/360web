@@ -63,12 +63,18 @@ export class Status {
             label: "Cancelado",
             colors: "bg-red-200 text-red-800",
         },
+        {
+            id: 5,
+            label: "Entregado",
+            colors: "bg-yellow-200 text-yellow-800",
+        },
     ];
 
     static Pending = 1;
     static Accepted = 2;
     static Rejected = 3;
     static Cancelled = 4;
+    static Delivered = 5;
 }
 
 export class Edit {
@@ -76,5 +82,6 @@ export class Edit {
         accept: 1,
         cancel: 2,
         edit: 3,
+        deliver: 4,
     };
 }

@@ -6,8 +6,16 @@ import { useAppStore } from "@/hooks/useAppStore";
 import { useProductStore } from "@/hooks/useProductStore";
 
 export default function ProductCard({ edit, product, preview }) {
-    const { product_id, name, brand, price, stock, category_name, image_url } =
-        product;
+    const {
+        product_id,
+        name,
+        brand,
+        price,
+        stock,
+        category_name,
+        image_url,
+        is_disabled,
+    } = product;
 
     const { addToCart, cart, updateQuantity } = useAppStore();
 
@@ -50,13 +58,13 @@ export default function ProductCard({ edit, product, preview }) {
     return (
         <div className="w-auto h-max rounded-md border px-1 shadow-md">
             <p
-                className={`text-white px-2 w-max absolute rounded-r-full mt-1 shadow-md -ml-1 ${
+                className={`text-white px-2 w-max absolute rounded-r-full mt-1 shadow-md -ml-1 z-10 ${
                     stock > 0 ? "bg-green-400" : "bg-red-400"
                 }`}
             >
                 {stock > 0 ? "Existencias: " + stock : "Sin existencias"}
             </p>
-            <div className="min-w-[250px] h-[250px] bg-gray-200 flex items-center justify-center">
+            <div className="min-w-[250px] h-[250px] bg-gray-200 flex items-center justify-center relative">
                 <img
                     className="w-36 h-36 object-center object-contain bg-gray-200"
                     src={image_url}
@@ -64,9 +72,16 @@ export default function ProductCard({ edit, product, preview }) {
                 />
             </div>
             <div className="p-2">
-                <p className="text-xs bg-blue-200 px-2 w-max rounded-full ">
-                    {category_name}
-                </p>
+                <div className="flex justify-between items-center">
+                    <p className="text-xs bg-blue-200 px-2 w-max rounded-full ">
+                        {category_name}
+                    </p>
+                    {is_disabled && (
+                        <p className="text-xs bg-red-200 px-2 w-max rounded-full ">
+                            Deshabilitado
+                        </p>
+                    )}
+                </div>
                 <p className="font-semibold">{name}</p>
                 <p className="text-sm">{brand}</p>
                 <div className="flex justify-between items-center">

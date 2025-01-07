@@ -92,12 +92,11 @@ router.patch(
     ProductController.update
 );
 
-router.post(
+router.patch(
     "/update-status",
     body("product_id")
         .isInt({ min: 1 })
         .withMessage("El product_id ingresado es inválido"),
-    body("status").isBoolean().withMessage("El estado es inválido"),
 
     handleErrors,
     ProductController.updateStatus

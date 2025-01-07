@@ -109,4 +109,16 @@ export class ProductsAPI {
             }
         }
     };
+
+    static updateStatus = async (product_id) => {
+        try {
+            const url = "/products/update-status";
+            const { data } = await api.patch(url, { product_id });
+            return data;
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.errors[0].msg);
+            }
+        }
+    };
 }

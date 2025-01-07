@@ -63,4 +63,14 @@ export class CategoriesAPI {
             if (isAxiosError(error)) throw new Error(error.response.data.error);
         }
     };
+
+    static updateStatus = async (category_id) => {
+        try {
+            const url = "/categories/update-status";
+            const { data } = await api.patch(url, { category_id });
+            return data;
+        } catch (error) {
+            if (isAxiosError(error)) throw new Error(error.response.data.error);
+        }
+    };
 }

@@ -65,12 +65,11 @@ export class CategoryController {
         try {
             checkPermissions(req, res, 2);
 
-            const { category_id, is_disabled } = req.body;
+            const { category_id } = req.body;
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
                 .input("category_id", sql.Int, category_id)
-                .input("is_disabled", sql.Bit, is_disabled)
                 .execute("UpdateCategoryStatus");
 
             res.send(results.recordset);

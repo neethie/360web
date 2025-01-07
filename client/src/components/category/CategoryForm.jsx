@@ -19,7 +19,7 @@ export default function CategoryForm({ errors, register, category }) {
                         type="text"
                         name="name"
                         id="form_category_name"
-                        placeholder="Computadoras gamer"
+                        placeholder="Caja de cerillos"
                         className="bg-gray-100 p-2 rounded-xl focus:bg-transparent"
                         defaultValue={category?.name}
                         {...register("name", {

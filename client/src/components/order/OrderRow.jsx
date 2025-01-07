@@ -23,12 +23,16 @@ export default function OrderRow({ order, userView }) {
     });
 
     const handleStatus = (status) => {
-        toast.info(
-            `Has ${
-                status === Status.Accepted ? "aceptado" : "rechazado"
-            } una orden`
-        );
+        const statusLabel = [
+            "",
+            "aceptado",
+            "rechazado",
+            "cancelado",
+            "entregado",
+        ];
+        toast.info(`Has ${statusLabel[status - 1]} una orden`);
         const data = { order_id: order.order_id, status: status };
+        console.log(data);
         mutate(data);
     };
 
@@ -48,19 +52,43 @@ export default function OrderRow({ order, userView }) {
             {!userView ? (
                 <td>
                     <div className="flex flex-row gap-2 justify-center text-white">
-                        <ButtonOption
-                            option={Edit.Types.accept}
-                            handleClick={() => handleStatus(Status.Accepted)}
-                        />
+                        {order.status_id === 1 && (
+                            <>
+                                <ButtonOption
+                                    option={Edit.Types.accept}
+                                    handleClick={() =>
+                                        handleStatus(Status.Accepted)
+                                    }
+                                    label={"Aceptar"}
+                                />
 
-                        <ButtonOption
-                            option={Edit.Types.cancel}
-                            handleClick={() => handleStatus(Status.Rejected)}
-                        />
+                                <ButtonOption
+                                    option={Edit.Types.cancel}
+                                    handleClick={() =>
+                                        handleStatus(Status.Rejected)
+                                    }
+                                    label={"Rechazar"}
+                                />
 
-                        <Link to={`edit/${order.order_id}`}>
-                            <ButtonOption option={Edit.Types.edit} />
-                        </Link>
+                                <Link to={`edit/${order.order_id}`}>
+                                    <ButtonOption
+                                        option={Edit.Types.edit}
+                                        label={"Editar"}
+                                    />
+                                </Link>
+                            </>
+                        )}
+                        {order.status_id === 2 && (
+                            <>
+                                <ButtonOption
+                                    option={Edit.Types.deliver}
+                                    handleClick={() =>
+                                        handleStatus(Status.Delivered)
+                                    }
+                                    label={"Entregar"}
+                                />
+                            </>
+                        )}
                     </div>
                 </td>
             ) : (

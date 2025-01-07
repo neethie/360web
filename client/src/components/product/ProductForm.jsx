@@ -1,16 +1,40 @@
 import ErrorMessage from "@/components/ui/ErrorMessage";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CategoriesAPI } from "@/services/categoriesAPI";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import Button from "../ui/Button";
+import { ProductsAPI } from "../../services/productsAPI";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductForm({ errors, register, product, watch }) {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["loadCategories"],
         queryFn: CategoriesAPI.getAll,
     });
+
+    const navigate = useNavigate();
+
+    const { mutate } = useMutation({
+        mutationFn: ProductsAPI.updateStatus,
+        onSuccess: () => {
+            toast.info(
+                `Has ${
+                    product.is_disabled ? "habilitado" : "deshabilitado"
+                } el producto`
+            );
+            navigate("/admin/products");
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
+
+    const handleClick = () => {
+        mutate(product.product_id);
+    };
 
     const [picture, setPicture] = useState("");
 
@@ -220,7 +244,7 @@ export default function ProductForm({ errors, register, product, watch }) {
                                     ? "bg-green-400"
                                     : "bg-red-400"
                             }
-                            handle={() => console.log("hola")}
+                            handle={handleClick}
                         />
                     )}
                 </div>

@@ -215,12 +215,11 @@ export class ProductController {
         try {
             checkPermissions(req, res, 2);
 
-            const { product_id, status } = req.body;
+            const { product_id } = req.body;
             const pool = await sql.connect(sqlConfig);
             const results = await pool
                 .request()
                 .input("product_id", sql.Int, product_id)
-                .input("status", sql.Bit, status)
                 .execute("UpdateProductStatus");
 
             res.send(results.recordset);

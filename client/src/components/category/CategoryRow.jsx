@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { CiCircleCheck } from "react-icons/ci";
 import { CiCircleRemove } from "react-icons/ci";
@@ -8,12 +8,31 @@ import ButtonOption from "@/components/ui/ButtonOption";
 
 import { Edit } from "@/utils/constants";
 import { CategoriesAPI } from "@/services/categoriesAPI";
+import { toast } from "react-toastify";
 
 export default function CategoryRow({ category }) {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["countProductsCategory", category.category_id],
         queryFn: () => CategoriesAPI.countProducts(category.category_id),
     });
+
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        mutationFn: CategoriesAPI.updateStatus,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["getCategories"]);
+            toast.info("Editaste una categoria");
+        },
+        onError: (error) => {
+            toast.error(error.cause);
+        },
+    });
+
+    const handleClick = () => {
+        mutate(category.category_id);
+    };
+
     if (isLoading) return "Cargando...";
     if (isError) return "Hubo un error";
 
@@ -48,11 +67,25 @@ export default function CategoryRow({ category }) {
             </td>
             <td className="">
                 <div className="flex flex-row gap-2 justify-center text-white">
-                    <Link to={`delete/${category.category_id}`}>
-                        <ButtonOption option={Edit.Types.cancel} />
-                    </Link>
+                    {category.is_disabled ? (
+                        <ButtonOption
+                            option={Edit.Types.accept}
+                            label={"Habilitar"}
+                            handleClick={handleClick}
+                        />
+                    ) : (
+                        <ButtonOption
+                            option={Edit.Types.cancel}
+                            label={"Deshabilitar"}
+                            handleClick={handleClick}
+                        />
+                    )}
+
                     <Link to={`edit/${category.category_id}`}>
-                        <ButtonOption option={Edit.Types.edit} />
+                        <ButtonOption
+                            option={Edit.Types.edit}
+                            label={"Editar"}
+                        />
                     </Link>
                 </div>
             </td>

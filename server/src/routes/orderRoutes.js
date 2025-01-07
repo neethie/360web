@@ -43,10 +43,8 @@ router.post(
         .isInt({ min: 1 })
         .withMessage("El order_id ingresado no es válido"),
     body("status")
-        .isInt({ min: 1, max: 3 })
-        .withMessage(
-            "El estado ingresado es inválido. (1. Pendiente 2. Aceptado 3. Rechazado (eliminar) )"
-        ),
+        .isInt({ min: 1, max: 5 })
+        .withMessage("El estado ingresado es inválido."),
 
     handleErrors,
     OrderController.updateStatus
