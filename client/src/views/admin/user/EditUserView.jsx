@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { formSchema } from "./formSchema";
 
@@ -18,11 +19,25 @@ export default function EditUserView() {
         resolver: yupResolver(formSchema),
     });
 
-    const handleForm = (data) => {
-        console.log(data);
-    };
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: UsersAPI.update,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["loadUser", user_id]);
+            navigate("/admin/users");
+            toast.info("Has editado un usuario");
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
 
     const { user_id } = useParams();
+
+    const handleForm = (data) => {
+        mutate({ ...data, user_id });
+    };
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ["loadUser", user_id],

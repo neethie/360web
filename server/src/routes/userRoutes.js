@@ -40,6 +40,10 @@ router.patch(
             body("address")
                 .isLength({ min: 5 })
                 .withMessage("Dirección inválida"),
+            body("rol_id")
+                .isInt({ min: 1, max: 3 })
+                .withMessage("El rol es inválido"),
+            body("is_disabled").isInt(),
         ],
         {
             message: "Al menos un campo debe modificarse",

@@ -38,4 +38,14 @@ export class UsersAPI {
             console.error(error);
         }
     };
+
+    static update = async (formData) => {
+        try {
+            const url = `/users/update`;
+            const { data } = await api.patch(url, formData);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }

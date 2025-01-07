@@ -67,6 +67,8 @@ export class UserController {
                 phone = null,
                 birthday = null,
                 address = null,
+                rol_id = null,
+                is_disabled = null,
             } = req.body;
             const pool = await sql.connect(sqlConfig);
 
@@ -76,7 +78,7 @@ export class UserController {
                     .input("email", sql.VarChar, email)
                     .query("SELECT email FROM users WHERE email = @email");
 
-                if (checkEmail.recordset.length) {
+                if (checkEmail.recordset.length > 1) {
                     res.status(409).json({
                         message: "El email ya existe",
                     });
@@ -92,6 +94,8 @@ export class UserController {
                 .input("phone", sql.VarChar, phone)
                 .input("birthday", sql.DateTime, birthday)
                 .input("address", sql.VarChar, address)
+                .input("rol_id", sql.Int, rol_id)
+                .input("is_disabled", sql.Int, is_disabled)
                 .execute("UpdateUser");
 
             res.send(results.recordset);
