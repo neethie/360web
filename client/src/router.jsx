@@ -28,6 +28,7 @@ import SearchView from "@/views/store/SearchView";
 import ContactView from "@/views/store/ContactView";
 import CartView from "@/views/store/CartView";
 import AccountView from "@/views/store/AccountView";
+import OrderView from "./views/store/OrderView";
 
 export default function Router() {
     return (
@@ -39,6 +40,7 @@ export default function Router() {
                     <Route path="search" element={<SearchView />} />
                     <Route path="contact" element={<ContactView />} />
                     <Route path="cart" element={<CartView />} />
+                    <Route path="order/:order_id" element={<OrderView />} />
                     <Route path="account" element={<AccountView />} />
                 </Route>
 

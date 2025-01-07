@@ -16,20 +16,6 @@ export const useProductStore = create()(
                 productsStore: products,
             }));
         },
-        updateProductsStoreStock: (product_id, stock) => {
-            set((state) => ({
-                productsStore: state.productsStore.map((prod) =>
-                    prod.product_id === product_id ? { ...prod, stock } : prod
-                ),
-            }));
-        },
-        updateProductsStore: (product) => {
-            set((state) => ({
-                productsStore: state.productsStore.map((prod) =>
-                    prod.product_id === product.product_id ? product : prod
-                ),
-            }));
-        },
         removeProductsStore: (product_id) => {
             set((state) => ({
                 productsStore: state.productsStore.filter(

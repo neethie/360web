@@ -28,6 +28,7 @@ export class AuthAPI {
     static register = async (formData) => {
         try {
             const { data } = await api.post("/auth/register", formData);
+            localStorage.setItem("AUTH_TOKEN", data);
             return data;
         } catch (error) {
             if (isAxiosError(error)) {

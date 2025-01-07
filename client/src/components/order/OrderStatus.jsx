@@ -12,6 +12,7 @@ export default function OrderStatus({ status }) {
             {status === Status.Pending && <CiClock2 />}
             {status === Status.Accepted && <CiCircleCheck />}
             {status === Status.Rejected && <CiCircleRemove />}
+            {status === Status.Cancelled && <CiCircleRemove />}
             <p>{Status.Types[status].label}</p>
         </div>
     );

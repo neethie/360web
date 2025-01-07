@@ -39,15 +39,17 @@ export default function UserRow({ user }) {
                         <ButtonOption
                             option={Edit.Types.accept}
                             handleClick={handleDisable}
+                            label={"Habilitar"}
                         />
                     ) : (
                         <ButtonOption
                             option={Edit.Types.cancel}
                             handleClick={handleDisable}
+                            label={"Deshabilitar"}
                         />
                     )}
                     <Link to={`edit/${user.user_id}`}>
-                        <ButtonOption option={Edit.Types.edit} />
+                        <ButtonOption option={Edit.Types.edit} label="Editar" />
                     </Link>
                 </div>
             </td>

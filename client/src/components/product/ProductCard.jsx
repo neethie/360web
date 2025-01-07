@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Button from "@/components/ui/Button";
-import { useAppStore } from "../../hooks/useAppStore";
-import { useProductStore } from "../../hooks/useProductStore";
+import { useAppStore } from "@/hooks/useAppStore";
+import { useProductStore } from "@/hooks/useProductStore";
 
 export default function ProductCard({ edit, product, preview }) {
     const { product_id, name, brand, price, stock, category_name, image_url } =
@@ -64,7 +64,7 @@ export default function ProductCard({ edit, product, preview }) {
                 />
             </div>
             <div className="p-2">
-                <p className="text-xs bg-gray-200 px-2 w-max rounded-full ">
+                <p className="text-xs bg-blue-200 px-2 w-max rounded-full ">
                     {category_name}
                 </p>
                 <p className="font-semibold">{name}</p>

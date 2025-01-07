@@ -1,15 +1,13 @@
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-
-import { useAppStore } from "@/hooks/useAppStore";
+import { useNavigate } from "react-router-dom";
 
 import { AuthAPI } from "@/services/authAPI";
 
 import ErrorMessage from "@/components/ui/ErrorMessage";
-
-import * as yup from "yup";
 
 const registerSchema = yup.object().shape({
     email: yup
@@ -51,15 +49,13 @@ const verifyAge = (date) => {
 };
 
 export default function RegisterForm() {
-    const { setAuthForm } = useAppStore();
-
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { mutate } = useMutation({
         mutationFn: AuthAPI.register,
         onSuccess: () => {
-            toast.success(
-                "Te has registrado correctamente, inicia sesión ahora"
-            );
-            setAuthForm(0);
+            toast.success("Te has registrado correctamente");
+            queryClient.refetchQueries(["user"]).then(() => navigate("/"));
         },
         onError: (error) => {
             toast.error(error.message);

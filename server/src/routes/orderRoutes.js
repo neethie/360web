@@ -32,13 +32,11 @@ router.get(
 
 router.post(
     "/create",
-    body("user_id")
-        .isInt({ min: 1 })
-        .withMessage("El user_id ingresado no es válido"),
-
+    body("cart").isArray(),
     handleErrors,
     OrderController.create
 );
+
 router.post(
     "/update-status",
     body("order_id")
@@ -52,6 +50,16 @@ router.post(
 
     handleErrors,
     OrderController.updateStatus
+);
+
+router.post(
+    "/cancel",
+    body("order_id")
+        .isInt({ min: 1 })
+        .withMessage("El order_id ingresado no es válido"),
+
+    handleErrors,
+    OrderController.cancel
 );
 
 export default router;

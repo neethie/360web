@@ -1,7 +1,6 @@
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 
 import ProductCard from "@/components/product/ProductCard";
 
@@ -9,30 +8,15 @@ import { ProductsAPI } from "@/services/productsAPI";
 import { CategoriesAPI } from "@/services/categoriesAPI";
 import { useAppStore } from "@/hooks/useAppStore";
 import { setSearchQuery } from "@/utils/search";
-import { useProductStore } from "@/hooks/useProductStore";
 
 export default function SearchView() {
-    const location = useLocation();
-
     const { search, setSearch } = useAppStore();
 
     const { register, handleSubmit, watch, reset } = useForm({
-        defaultValues: {
-            category_id: -1,
-            min_price: 0,
-            max_price: 10000,
-        },
+        defaultValues: search,
     });
-    const { setProductsStore } = useProductStore();
     const results = useQueries({
         queries: [
-            {
-                queryKey: ["loadAvailableProducts"],
-                queryFn: ProductsAPI.getAll,
-                onSuccess: (data) => {
-                    setProductsStore(data); // Ejecutar solo cuando hay nuevos datos
-                },
-            },
             {
                 queryKey: ["loadCategories"],
                 queryFn: CategoriesAPI.getAll,
@@ -44,9 +28,8 @@ export default function SearchView() {
         ],
     });
 
-    const products = results[0];
-    const categories = results[1];
-    const productsSearch = results[2];
+    const categories = results[0];
+    const productsSearch = results[1];
 
     const navigate = useNavigate();
 
@@ -63,9 +46,9 @@ export default function SearchView() {
         queryClient.invalidateQueries(["searchProducts", newSearch]);
     };
 
-    if (products.isLoading || categories.isLoading) return "Cargando...";
-    if (products.isError || categories.isError) return "Error...";
-    if (!products.data || !categories.data) return "No hay productos";
+    if (productsSearch.isLoading || categories.isLoading) return "Cargando...";
+    if (productsSearch.isError || categories.isError) return "Error...";
+    if (!productsSearch.data || !categories.data) return "No hay productos";
 
     return (
         <div className="grid grid-cols-[1fr_3fr]">
@@ -176,20 +159,13 @@ export default function SearchView() {
                         ? `Resultados de la busqueda: '${search.name}'`
                         : "Nuestros productos"}
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {!location.search
-                        ? products.data.map((product) => (
-                              <ProductCard
-                                  key={product.product_id}
-                                  product={product}
-                              />
-                          ))
-                        : productsSearch.data?.map((product) => (
-                              <ProductCard
-                                  key={product.product_id}
-                                  product={product}
-                              />
-                          ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {productsSearch.data?.map((product) => (
+                        <ProductCard
+                            key={product.product_id}
+                            product={product}
+                        />
+                    ))}
                 </div>
             </main>
         </div>

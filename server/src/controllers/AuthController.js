@@ -31,7 +31,7 @@ export class AuthController {
             }
 
             const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-            await pool
+            const result = await pool
                 .request()
                 .input("email", sql.VarChar, email)
                 .input("password", sql.VarChar, hashedPassword)
@@ -42,7 +42,9 @@ export class AuthController {
                 .input("address", sql.VarChar, address)
                 .execute("CreateUser");
 
-            res.send("Cuenta registrada");
+            const { user_id } = result.recordset[0];
+            const token = generateJWT({ user_id });
+            res.send(token);
         } catch (error) {
             res.status(500).json({
                 message: "Hubo un error al intentar registrar al usuario",

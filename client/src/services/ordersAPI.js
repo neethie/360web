@@ -1,4 +1,5 @@
 import api from "@/utils/axios";
+import { isAxiosError } from "axios";
 
 export class OrdersAPI {
     static countAll = async () => {
@@ -26,7 +27,7 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error)) throw new Error(error.response.data);
         }
     };
 
@@ -60,12 +61,35 @@ export class OrdersAPI {
         }
     };
 
+    // user
+
+    static create = async (cart) => {
+        try {
+            const url = "/orders/create";
+            const { data } = await api.post(url, { cart });
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     //
 
     static updateStatus = async (orderData) => {
         try {
             const url = "/orders/update-status";
             const { data } = await api.post(url, orderData);
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    static cancel = async (orderData) => {
+        try {
+            const url = "/orders/cancel";
+            const { data } = await api.post(url, orderData);
+            console.log(data);
             return data;
         } catch (error) {
             console.error(error);

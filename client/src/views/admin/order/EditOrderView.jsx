@@ -44,7 +44,7 @@ export default function EditOrderView() {
                 <p>
                     Cliente:{" "}
                     <span className="font-normal">
-                        {order.data[0].full_name}
+                        {order.data[0].client_name}
                     </span>
                 </p>
                 <p>

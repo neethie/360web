@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CategoriesAPI } from "@/services/categoriesAPI";
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import Button from "../ui/Button";
 
 export default function ProductForm({ errors, register, product, watch }) {
     const { data, isLoading, isError } = useQuery({
@@ -11,9 +12,20 @@ export default function ProductForm({ errors, register, product, watch }) {
         queryFn: CategoriesAPI.getAll,
     });
 
-    const [picture, setPicture] = useState(null);
+    const [picture, setPicture] = useState("");
 
-    const tempProduct = {
+    let tempProduct = product
+        ? product
+        : {
+              name: "Producto nuevo",
+              brand: "Sin marca",
+              category_id: 1,
+              price: 1,
+              stock: 1,
+              image_url: picture,
+          };
+
+    tempProduct = {
         name: watch("name"),
         brand: watch("brand"),
         category_id: watch("category_id"),
@@ -25,8 +37,10 @@ export default function ProductForm({ errors, register, product, watch }) {
     useEffect(() => {
         if (tempProduct.image?.[0]) {
             setPicture(URL.createObjectURL(tempProduct.image[0]));
-        }
-    }, [tempProduct.image]);
+        } else if (product?.image_url) {
+            setPicture(product.image_url);
+        } else setPicture("");
+    }, [tempProduct.image, product?.image_url]);
     if (isLoading) return "Cargando...";
     if (isError) return "Error";
     if (!data) return "No hay categorias";
@@ -188,12 +202,27 @@ export default function ProductForm({ errors, register, product, watch }) {
                         <ProductCard product={tempProduct} preview />
                     </div>
                 </div>
-                <div>
+                <div className="flex justify-between">
                     <input
                         type="submit"
                         value={"Guardar"}
-                        className="bg-blue-400 opacity-80 hover:opacity-100 cursor-pointer text-white px-2 py-1 rounded-md"
+                        className="bg-blue-400 opacity-80 hover:opacity-100 cursor-pointer text-white px-2 py-1 rounded-xl"
                     />
+                    {product && (
+                        <Button
+                            text={
+                                product.is_disabled
+                                    ? "Habilitar"
+                                    : "Deshabilitar"
+                            }
+                            classname={
+                                product.is_disabled
+                                    ? "bg-green-400"
+                                    : "bg-red-400"
+                            }
+                            handle={() => console.log("hola")}
+                        />
+                    )}
                 </div>
             </div>
         </>

@@ -3,18 +3,14 @@ import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
-import { useAppStore } from "../../hooks/useAppStore";
-import { setSearchQuery } from "../../utils/search";
-import { useQueryClient } from "@tanstack/react-query";
+import { useAppStore } from "@/hooks/useAppStore";
+import { setSearchQuery } from "@/utils/search";
 
 export default function SearchBar() {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
 
     const { search, setSearch } = useAppStore();
-
-    const queryClient = useQueryClient();
-
     const handleSearch = (data) => {
         const newSearch = {
             ...search,
@@ -23,7 +19,6 @@ export default function SearchBar() {
 
         navigate(`/search?${setSearchQuery(newSearch)}`);
         setSearch(newSearch);
-        queryClient.invalidateQueries(["searchProducts", newSearch]);
     };
 
     return (

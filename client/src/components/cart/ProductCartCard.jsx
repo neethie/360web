@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import Button from "../ui/Button";
-import { useProductStore } from "../../hooks/useProductStore";
-import { useAppStore } from "../../hooks/useAppStore";
-import { ProductsAPI } from "../../services/productsAPI";
+import { useProductStore } from "@/hooks/useProductStore";
+import { useAppStore } from "@/hooks/useAppStore";
+import { ProductsAPI } from "@/services/productsAPI";
 
 export default function ProductCartCard({ productCart }) {
     const { product_id } = productCart;

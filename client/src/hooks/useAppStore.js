@@ -72,5 +72,10 @@ export const useAppStore = create()(
                 ),
             }));
         },
+        resetCart: () => {
+            set(() => ({
+                cart: [],
+            }));
+        },
     }))
 );

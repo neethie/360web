@@ -18,7 +18,6 @@ export class ProductsAPI {
         try {
             const url = "/products";
             const { data } = await api(url);
-            useProductStore.getState().setProductsStore(data);
             return data;
         } catch (error) {
             if (isAxiosError(error))
@@ -61,20 +60,25 @@ export class ProductsAPI {
 
     static searchBy = async (searchData) => {
         try {
-            searchData = {
-                ...searchData,
-                category_id:
-                    searchData.category_id === -1
-                        ? null
-                        : parseInt(searchData.category_id),
-                name: searchData.name === -1 ? null : searchData.name,
-            };
             const url = `/products/search`;
             const { data } = await api(url, {
                 params: {
-                    ...searchData,
+                    category_id:
+                        searchData.category_id === -1
+                            ? null
+                            : parseInt(searchData.category_id),
+                    name: searchData.name === -1 ? null : searchData.name,
+                    min_price:
+                        searchData.min_price === 0
+                            ? null
+                            : searchData.min_price,
+                    max_price:
+                        searchData.max_price === 10000
+                            ? null
+                            : searchData.max_price,
                 },
             });
+            useProductStore.getState().setProductsStore(data);
             return data;
         } catch (error) {
             if (isAxiosError(error))

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ export default function EditProductView() {
         mutationFn: ProductsAPI.update,
         onSuccess: () => {
             toast.success("Se ha editado un producto");
+            queryClient.invalidateQueries(["getProducts"]);
             navigate("/admin/products");
         },
         onError: (error) => {
@@ -34,6 +35,7 @@ export default function EditProductView() {
     });
 
     const { product_id } = useParams();
+    const queryClient = useQueryClient();
 
     const handleForm = (data) => {
         const formData = new FormData();
