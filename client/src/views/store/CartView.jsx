@@ -34,6 +34,7 @@ export default function CartView() {
     });
 
     const handleCreate = () => {
+        if (cart.length === 0) return toast.error("No tienes productos");
         mutate(cart);
     };
 

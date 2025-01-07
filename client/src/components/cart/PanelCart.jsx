@@ -3,8 +3,13 @@ import ProductCartCard from "./ProductCartCard";
 import { useAppStore } from "../../hooks/useAppStore";
 
 export default function PanelCart({ checkout }) {
-    const { cart } = useAppStore();
+    const { cart, resetCart } = useAppStore();
     if (!cart.length) return <p>No hay productos en el carrito</p>;
+
+    const handleReset = () => {
+        resetCart();
+    };
+
     return (
         <>
             <div className="">
@@ -36,6 +41,12 @@ export default function PanelCart({ checkout }) {
                     Checkout
                 </Link>
             )}
+            <button
+                onClick={handleReset}
+                className="px-4 py-2 bg-red-300 hover:bg-red-400 rounded-md text-center text-white"
+            >
+                Limpiar carrito
+            </button>
         </>
     );
 }
