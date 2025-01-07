@@ -32,7 +32,6 @@ export default function OrderRow({ order, userView }) {
         ];
         toast.info(`Has ${statusLabel[status - 1]} una orden`);
         const data = { order_id: order.order_id, status: status };
-        console.log(data);
         mutate(data);
     };
 

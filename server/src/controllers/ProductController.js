@@ -57,8 +57,8 @@ export class ProductController {
             const {
                 name = null,
                 brand = null,
-                price_min = 0,
-                price_max = 99999,
+                price_min = null,
+                price_max = null,
                 category_id = null,
             } = req.query;
 

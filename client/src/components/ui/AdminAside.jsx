@@ -84,18 +84,6 @@ export default function AdminAside() {
                                     Productos
                                 </NavLink>
                                 <NavLink
-                                    to={"/admin/orders"}
-                                    onClick={handleMobileMenu}
-                                    className={({ isActive }) =>
-                                        "flex items-center gap-2 py-2 px-4 transition-all w-full rounded-full " +
-                                        (isActive
-                                            ? "bg-black text-white"
-                                            : "hover:text-black hover:translate-x-1")
-                                    }
-                                >
-                                    Ordenes
-                                </NavLink>
-                                <NavLink
                                     to={"/admin/categories"}
                                     onClick={handleMobileMenu}
                                     className={({ isActive }) =>

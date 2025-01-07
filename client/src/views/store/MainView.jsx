@@ -17,9 +17,9 @@ export default function MainView() {
         <>
             <div className="bg-orange-300 text-white grid grid-cols-[2fr_1fr] items-center md:mb-24">
                 <img
-                    src="https://www.hp.com/content/dam/sites/worldwide/personal-computers/consumer/hp-latest-products/HP_Q22_LATAM_LANDING_AMD_VIS_ID_Hero_banner_1200x600_withlogo.jpg"
+                    src="https://cdn.pixabay.com/photo/2017/11/06/13/50/family-2923690_1280.jpg"
                     alt="Hero icon"
-                    className="md:h-[400px] object-fill h-[175px]"
+                    className="md:h-[400px] md:w-[1280px] object-cover h-[175px]"
                 />
 
                 <div className="space-y-2 flex flex-col p-4">

@@ -115,7 +115,7 @@ export default function ProductForm({ errors, register, product, watch }) {
                                 type="text"
                                 name="brand"
                                 id="form_product_brand"
-                                placeholder="AMD"
+                                placeholder="Marca nueva"
                                 className="bg-gray-100 p-2 rounded-xl"
                                 defaultValue={product?.brand}
                                 {...register("brand")}

@@ -86,7 +86,7 @@ export default function ProductCard({ edit, product, preview }) {
                 <p className="text-sm">{brand}</p>
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-green-500 font-semibold">
-                        Q{price}.00
+                        Q{price}
                     </p>
                     {!preview ? (
                         edit ? (

@@ -5,13 +5,12 @@ import { OrdersAPI } from "@/services/ordersApi";
 import OrderRow from "@/components/order/OrderRow";
 
 export default function OrdersView() {
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["orders"],
         queryFn: OrdersAPI.getAll,
     });
 
     if (isLoading) return <div className="">Cargando...</div>;
-    if (isError) return <div className="">Error: {error.message}</div>;
     if (!data) return <div className="">No hay datos disponibles</div>;
 
     return (
