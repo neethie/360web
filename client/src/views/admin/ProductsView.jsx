@@ -29,7 +29,7 @@ export default function ProductsView() {
                     <Button text={"Crear"} classname={"bg-blue-600"} />
                 </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-x-2 gap-y-2 ">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2 ">
                 {data.map((product) => (
                     <ProductCard
                         key={product.product_id}

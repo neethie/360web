@@ -1,16 +1,14 @@
 import sql from "mssql";
 
 import { sqlConfig } from "../data/connection.js";
+import { User, UserModel } from "../models/userModel.js";
+import { where } from "sequelize";
 
 export class UserController {
     static getCount = async (req, res) => {
         try {
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .query("SELECT COUNT(*) FROM users");
-
-            res.send(results.recordset);
+            const count = await UserModel.getCount();
+            res.send(count);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de usuarios",
@@ -20,16 +18,8 @@ export class UserController {
     };
     static getAll = async (req, res) => {
         try {
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool.request().execute("LoadUsersData");
-
-            // Si hay registros
-            if (results.recordset.length) {
-                res.send(results.recordset);
-                return;
-            }
-
-            res.send(results.recordset);
+            const users = await UserModel.getAll();
+            res.send(users);
         } catch (error) {
             res.status(500).json({
                 message:
@@ -42,13 +32,8 @@ export class UserController {
     static getById = async (req, res) => {
         const { user_id } = req.params;
         try {
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .execute("LoadUserData");
-
-            res.send(results.recordset);
+            const user = await UserModel.getByUserId(user_id);
+            res.send(user);
         } catch (error) {
             res.status(500).json({
                 message:
@@ -60,45 +45,21 @@ export class UserController {
 
     static update = async (req, res) => {
         try {
-            const {
-                user_id,
-                email = null,
-                full_name = null,
-                phone = null,
-                birthday = null,
-                address = null,
-                rol_id = null,
-                is_disabled = null,
-            } = req.body;
-            const pool = await sql.connect(sqlConfig);
+            const { email = null } = req.body;
 
-            if (email !== null) {
-                const checkEmail = await pool
-                    .request()
-                    .input("email", sql.VarChar, email)
-                    .query("SELECT email FROM users WHERE email = @email");
-
-                if (checkEmail.recordset.length > 1) {
+            if (email) {
+                const userExists = await User.findAll({
+                    where: { email },
+                });
+                if (userExists.length > 1) {
                     res.status(409).json({
                         message: "El email ya existe",
                     });
                     return;
                 }
             }
-
-            const results = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .input("email", sql.VarChar, email)
-                .input("full_name", sql.VarChar, full_name)
-                .input("phone", sql.VarChar, phone)
-                .input("birthday", sql.DateTime, birthday)
-                .input("address", sql.VarChar, address)
-                .input("rol_id", sql.Int, rol_id)
-                .input("is_disabled", sql.Int, is_disabled)
-                .execute("UpdateUser");
-
-            res.send(results.recordset);
+            const user = await UserModel.update(req.body);
+            res.send(user);
         } catch (error) {
             res.status(500).json({
                 message:
@@ -111,14 +72,14 @@ export class UserController {
     static updateStatus = async (req, res) => {
         try {
             const { user_id, is_disabled } = req.body;
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .input("is_disabled", sql.Int, is_disabled)
-                .query(
-                    "UPDATE users SET is_disabled = @is_disabled WHERE user_id = @user_id"
-                );
+            await User.update(
+                { is_disabled },
+                {
+                    where: {
+                        user_id,
+                    },
+                }
+            );
             res.send("Se ha modificado un usuario");
         } catch (error) {
             res.status(500).json({
