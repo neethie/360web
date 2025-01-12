@@ -20,6 +20,7 @@ export default function ResumeCard({ resume }) {
 
     if (isLoading) return "Cargando...";
     if (isError) return "Error";
+    console.log(data);
     return (
         <div
             className=" p-3 w-full md:w-48 text-white rounded-xl shadow-lg flex items-center justify-between"
@@ -30,8 +31,8 @@ export default function ResumeCard({ resume }) {
             {iconMap[resume.id]}
             <div className="text-right">
                 <p>{resume.label}</p>
-                {data.length ? (
-                    <p className="font-bold text-3xl">{data[0][""]}</p>
+                {data ? (
+                    <p className="font-bold text-3xl">{data.count}</p>
                 ) : (
                     <p className="font-bold text-3xl">-</p>
                 )}

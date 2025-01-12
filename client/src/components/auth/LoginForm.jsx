@@ -40,12 +40,11 @@ export default function LoginForm() {
         onError: (error) => {
             toast.error(error.message);
         },
-        onSuccess: () => {
-            queryClient.refetchQueries(["user"]).then(() => {
-                const data = queryClient.getQueryData(["user"]);
-                if (data.rol_id === 1) return navigate("/");
-                setSelectRole(true);
-            });
+        onSuccess: async () => {
+            await queryClient.refetchQueries(["user"]);
+            const data = queryClient.getQueryData(["user"]);
+            if (data.rol_id === 1) return navigate("/");
+            setSelectRole(true);
         },
     });
 

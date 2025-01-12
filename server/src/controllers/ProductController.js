@@ -11,12 +11,8 @@ export class ProductController {
         try {
             checkPermissions(req, res, 2);
 
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .query("SELECT COUNT(*) FROM products");
-
-            res.send(results.recordset);
+            const count = 10;
+            res.send({ count });
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de products",

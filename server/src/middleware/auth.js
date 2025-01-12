@@ -1,8 +1,7 @@
-import jwt from "jsonwebtoken";
-import sql from "mssql";
+import jwt, { decode } from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import { sqlConfig } from "../data/connection.js";
+import { UserServices } from "../services/user.services.js";
 
 dotenv.config();
 
@@ -18,15 +17,16 @@ export const authenticate = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_KEY);
         if (decoded.user_id) {
-            const pool = await sql.connect(sqlConfig);
-            const response = await pool
-                .request()
-                .input("user_id", sql.Int, decoded.user_id)
-                .query(
-                    "SELECT user_id, email, rol_id, full_name FROM users WHERE user_id = @user_id"
-                );
-            if (response.recordset.length) {
-                req.user = response.recordset[0];
+            const [user] = await UserServices.getByUserId(decoded.user_id);
+            const { user_id, email, rol_id, full_name } = user;
+
+            if (user) {
+                req.user = {
+                    user_id,
+                    email,
+                    rol_id,
+                    full_name,
+                };
                 return next();
             } else {
                 req.user = {};
@@ -34,10 +34,14 @@ export const authenticate = async (req, res, next) => {
                     error: "Token inválido (user_id)",
                 });
             }
-        } else console.log("Tokken inválido");
+        } else
+            res.status(401).json({
+                error: "Token inválido (decoded)",
+            });
     } catch (error) {
         res.status(500).json({
             error: "Token inválido",
         });
+        console.log(error);
     }
 };

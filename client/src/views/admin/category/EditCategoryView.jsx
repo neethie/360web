@@ -51,7 +51,7 @@ export default function EditCategoryView() {
     if (isError) return "Hubo un error";
     if (!data) return "No hay datos";
 
-    const category = data[0];
+    const category = data;
     return (
         <>
             <h2 className="font-semibold text-3xl">Editar Categoria</h2>

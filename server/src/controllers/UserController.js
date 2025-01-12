@@ -1,14 +1,11 @@
-import sql from "mssql";
-
-import { sqlConfig } from "../data/connection.js";
-import { User, UserModel } from "../models/userModel.js";
-import { where } from "sequelize";
+import { User } from "../models/userModel.js";
+import { UserServices } from "../services/user.services.js";
 
 export class UserController {
     static getCount = async (req, res) => {
         try {
-            const count = await UserModel.getCount();
-            res.send(count);
+            const count = await UserServices.getCount();
+            res.send({ count });
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de usuarios",
@@ -18,7 +15,7 @@ export class UserController {
     };
     static getAll = async (req, res) => {
         try {
-            const users = await UserModel.getAll();
+            const users = await UserServices.getAll();
             res.send(users);
         } catch (error) {
             res.status(500).json({
@@ -32,7 +29,7 @@ export class UserController {
     static getById = async (req, res) => {
         const { user_id } = req.params;
         try {
-            const user = await UserModel.getByUserId(user_id);
+            const user = await UserServices.getByUserId(user_id);
             res.send(user);
         } catch (error) {
             res.status(500).json({
@@ -48,9 +45,7 @@ export class UserController {
             const { email = null } = req.body;
 
             if (email) {
-                const userExists = await User.findAll({
-                    where: { email },
-                });
+                const userExists = await UserServices.searchEmail(email);
                 if (userExists.length > 1) {
                     res.status(409).json({
                         message: "El email ya existe",
@@ -58,7 +53,7 @@ export class UserController {
                     return;
                 }
             }
-            const user = await UserModel.update(req.body);
+            const user = await UserServices.update(req.body);
             res.send(user);
         } catch (error) {
             res.status(500).json({

@@ -63,7 +63,7 @@ export default function CategoryRow({ category }) {
                 </div>
             </td>
             <td className="">
-                <p>{data[0][""] ? data[0][""] : "Sin productos"}</p>
+                <p>{data.count ? data.count : "Sin productos"}</p>
             </td>
             <td className="">
                 <div className="flex flex-row gap-2 justify-center text-white">
