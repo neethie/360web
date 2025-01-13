@@ -69,7 +69,7 @@ export default function OrderRow({ order, userView }) {
                                     label={"Rechazar"}
                                 />
 
-                                <Link to={`edit/${order.order_id}`}>
+                                <Link to={`orders/edit/${order.order_id}`}>
                                     <ButtonOption
                                         option={Edit.Types.edit}
                                         label={"Editar"}

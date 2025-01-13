@@ -64,7 +64,6 @@ export class UserServices {
                     is_disabled,
                     rol_id,
                 },
-                type: QueryTypes.UPDATE,
             }
         );
         return results;

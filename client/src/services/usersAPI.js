@@ -1,5 +1,5 @@
 import api from "@/utils/axios";
-
+import { isAxiosError } from "axios";
 export class UsersAPI {
     static getAll = async () => {
         try {
@@ -46,6 +46,9 @@ export class UsersAPI {
             return data;
         } catch (error) {
             console.error(error);
+            if (isAxiosError(error)) {
+                throw new Error(error.response.data.message);
+            }
         }
     };
 }

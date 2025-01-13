@@ -13,5 +13,6 @@ export const sequelize = new Sequelize(
                 trustServerCertificate: true,
             },
         },
+        logging: false,
     }
 );

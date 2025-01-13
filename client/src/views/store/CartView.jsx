@@ -26,9 +26,10 @@ export default function CartView() {
         onSuccess: (data) => {
             toast.success("Has creado una orden");
             resetCart();
-            navigate(`/order/${data[0].order_id}`);
+            navigate(`/order/${data.order_id}`);
         },
         onError: (error) => {
+            console.log(error);
             toast.error(error.message);
         },
     });

@@ -56,7 +56,7 @@ export class ProductServices {
             }
         );
         const { product_id } = result[0];
-        await updateImage(product_id);
+        await this.updateImage(product_id);
         return result[0];
     };
 

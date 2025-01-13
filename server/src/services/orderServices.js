@@ -1,4 +1,5 @@
 import { sequelize } from "../data/db.js";
+import { Product } from "../models/productModel.js";
 
 export class OrderServices {
     static getEarnings = async () => {
@@ -46,5 +47,42 @@ export class OrderServices {
             }
         );
         return results;
+    };
+
+    static getStock = async (products) => {
+        const stock = await Product.findAll({
+            where: {
+                product_id: products,
+            },
+            attributes: ["product_id", "name", "stock"],
+        });
+        return stock;
+    };
+
+    static create = async (user_id) => {
+        const [order] = await sequelize.query("CreateOrder :user_id", {
+            replacements: { user_id },
+        });
+        return order;
+    };
+
+    static createDetail = async (data) => {
+        const detail = await sequelize.query(
+            "CreateOrderProducts :order_id, :product_id, :quantity",
+            {
+                replacements: data,
+            }
+        );
+        return detail;
+    };
+
+    static getDetail = async (order_id) => {
+        const [detail] = await sequelize.query(
+            "LoadOrderDetailsByMaster :order_id",
+            {
+                replacements: { order_id },
+            }
+        );
+        return detail;
     };
 }

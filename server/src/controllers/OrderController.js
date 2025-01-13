@@ -87,46 +87,39 @@ export class OrderController {
     static create = async (req, res) => {
         try {
             const { user_id } = req.user;
-
             const { cart } = req.body;
 
             const products = cart.map((item) => item.product_id);
             const quantities = cart.map((item) => item.quantity);
-            const pool = await sql.connect(sqlConfig);
 
-            const checkStockQuery = `SELECT product_id, name, stock FROM products WHERE product_id IN (${products.join(
-                ","
-            )})`;
-            const checkStock = await pool.request().query(checkStockQuery);
+            const productStock = await OrderServices.getStock(products);
 
             for (let i = 0; i < cart.length; i++) {
-                const productIndex = checkStock.recordset.findIndex(
+                const productIndex = productStock.findIndex(
                     (item) => item.product_id === cart[i].product_id
                 );
-                if (quantities[i] > checkStock.recordset[productIndex].stock) {
+                if (quantities[i] > productStock[productIndex].stock) {
+                    const error = new Error(
+                        `El producto ${checkStock.recordset[productIndex].name} no tiene suficiente stock`
+                    );
                     return res.status(409).json({
-                        error: `El producto ${checkStock.recordset[productIndex].name} no tiene suficiente stock`,
+                        error: error.message,
                     });
                 }
             }
 
-            const results = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .execute("CreateOrder");
+            const [order] = await OrderServices.create(user_id);
 
             for (const item of cart) {
                 const { product_id, quantity } = item;
-
-                await pool
-                    .request()
-                    .input("order_id", sql.Int, results.recordset[0].order_id)
-                    .input("product_id", sql.Int, product_id)
-                    .input("quantity", sql.Int, quantity)
-                    .execute("CreateOrderProducts");
+                await OrderServices.createDetail({
+                    order_id: order.order_id,
+                    product_id,
+                    quantity,
+                });
             }
 
-            res.send(results.recordset);
+            res.send(order);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar crear una orden",

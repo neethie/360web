@@ -46,9 +46,13 @@ export class UserController {
 
             if (email) {
                 const userExists = await UserServices.searchEmail(email);
-                if (userExists.length > 1) {
+                if (
+                    userExists &&
+                    userExists.dataValues.user_id !== req.user.user_id
+                ) {
+                    const error = new Error("El email ya existe");
                     res.status(409).json({
-                        message: "El email ya existe",
+                        message: error.message,
                     });
                     return;
                 }
