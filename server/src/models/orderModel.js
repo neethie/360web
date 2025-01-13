@@ -11,6 +11,9 @@ export const Order = sequelize.define(
         user_id: {
             type: DataTypes.INTEGER,
         },
+        date_creation: {
+            type: DataTypes.DATE,
+        },
     },
     {
         timestamps: false,

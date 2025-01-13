@@ -7,7 +7,7 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 export default function ProductCartCard({ productCart }) {
     const { product_id } = productCart;
 
-    const { data, isError } = useQuery({
+    const { data, isError, isLoading } = useQuery({
         queryKey: ["loadProduct", product_id],
         queryFn: () => ProductsAPI.getById(product_id),
     });
@@ -51,6 +51,7 @@ export default function ProductCartCard({ productCart }) {
     };
 
     if (isError) return "Error";
+    if (isLoading) return "Cargando...";
 
     if (data)
         return (
@@ -58,11 +59,11 @@ export default function ProductCartCard({ productCart }) {
                 <td>
                     <div className="flex items-center gap-2">
                         <img
-                            src={data[0].image_url}
+                            src={data.image_url}
                             alt="imagen"
                             className="w-12 h-12 object-contain"
                         />
-                        <p>{data[0].name}</p>
+                        <p>{data.name}</p>
                     </div>
                 </td>
                 <td>
@@ -84,7 +85,7 @@ export default function ProductCartCard({ productCart }) {
                 </td>
                 <td>
                     <div className="flex justify-center items-center">
-                        Q{data[0].price * productCart.quantity}
+                        Q{data.price * productCart.quantity}
                     </div>
                 </td>
             </tr>

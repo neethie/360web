@@ -2,20 +2,14 @@ import sql from "mssql";
 
 import { sqlConfig } from "../data/connection.js";
 import { checkPermissions } from "../middleware/permissions.js";
+import { OrderServices } from "../services/orderServices.js";
 
 export class OrderController {
     static getEarnings = async (req, res) => {
         try {
             checkPermissions(req, res, 2);
-
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .query(
-                    "SELECT SUM(total_price) FROM orders WHERE MONTH(date_creation) = MONTH(GETDATE()) AND (status_id = 2)"
-                );
-
-            res.send(results.recordset);
+            const earnings = await OrderServices.getEarnings();
+            res.send(earnings);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener las ganancias de órdenes",
@@ -26,9 +20,8 @@ export class OrderController {
     static getCount = async (req, res) => {
         try {
             checkPermissions(req, res, 2);
-
-            const count = 10;
-            res.send({ count });
+            const count = await OrderServices.getCount();
+            res.send(count);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de órdenes",
@@ -39,18 +32,14 @@ export class OrderController {
     static getAll = async (req, res) => {
         try {
             checkPermissions(req, res, 2);
-
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool.request().execute("LoadOrders");
-
-            if (!results.recordset.length) {
+            const orders = await OrderServices.getAll();
+            if (!orders) {
                 res.status(404).json({
                     error: "No hay datos",
                 });
                 return;
             }
-
-            res.send(results.recordset);
+            res.send(orders);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener todas las ordenes",
@@ -62,16 +51,10 @@ export class OrderController {
     static getByUserId = async (req, res) => {
         try {
             const { user_id } = req.params;
-
             if (user_id != req.user.user_id)
                 return res.status(401).json({ error: "No autorizado" });
-
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .input("user_id", sql.Int, user_id)
-                .execute("LoadOrdersByUser");
-            res.send(results.recordset);
+            const order = await OrderServices.getByUserId(user_id);
+            res.send(order);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener todas las ordenes",
@@ -83,26 +66,16 @@ export class OrderController {
     static getById = async (req, res) => {
         try {
             const { order_id } = req.params;
-            const pool = await sql.connect(sqlConfig);
-            const results = await pool
-                .request()
-                .input("order_id", sql.Int, order_id)
-                .execute("LoadOrder");
-
-            if (!results.recordset.length) {
+            const order = await OrderServices.getByOrderId(order_id);
+            if (!order) {
                 res.status(404).json({
                     error: "No existe ese order_id",
                 });
                 return;
             }
-
-            if (
-                results.recordset[0].user_id != req.user.user_id &&
-                req.user.rol_id === 1
-            )
+            if (order.user_id != req.user.user_id && req.user.rol_id === 1)
                 return res.status(401).json({ error: "No autorizado" });
-
-            res.send(results.recordset);
+            res.send(order);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener una orden",
@@ -166,35 +139,27 @@ export class OrderController {
         try {
             const { user_id } = req.user;
             const { order_id } = req.body;
-            const pool = await sql.connect(sqlConfig);
-            const checkOrder = await pool
-                .request()
-                .input("order_id", sql.Int, order_id)
-                .query(
-                    "SELECT order_id, user_id FROM orders WHERE order_id = @order_id"
-                );
 
-            if (!checkOrder.recordset.length) {
+            const order = await OrderServices.getByOrderId(order_id);
+
+            if (!order) {
                 res.status(404).json({
                     error: "No existe ese order_id",
                 });
                 return;
             }
-
-            if (checkOrder.recordset[0].user_id !== user_id) {
+            if (order[0].user_id !== user_id) {
                 res.status(403).json({
                     error: "No autorizado",
                 });
                 return;
             }
 
-            const result = await pool
-                .request()
-                .input("order_id", sql.Int, order_id)
-                .input("status", sql.Int, 4)
-                .execute("UpdateOrderStatus");
-
-            res.json(result.recordset);
+            await OrderServices.updateStatus({
+                order_id,
+                status: 4,
+            });
+            res.json(order);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar cancelar una orden",
@@ -206,30 +171,8 @@ export class OrderController {
     static updateStatus = async (req, res) => {
         try {
             checkPermissions(req, res, 2);
-
-            const { order_id, status } = req.body;
-            const pool = await sql.connect(sqlConfig);
-            const checkOrder = await pool
-                .request()
-                .input("order_id", sql.Int, order_id)
-                .query(
-                    "SELECT order_id FROM orders WHERE order_id = @order_id"
-                );
-
-            if (!checkOrder.recordset.length) {
-                res.status(404).json({
-                    error: "No existe ese order_id",
-                });
-                return;
-            }
-
-            const result = await pool
-                .request()
-                .input("order_id", sql.Int, order_id)
-                .input("status", sql.Int, status)
-                .execute("UpdateOrderStatus");
-
-            res.json(result.recordset);
+            const order = await OrderServices.updateStatus(req.body);
+            res.json(order);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar actualizar el estado de una orden",
