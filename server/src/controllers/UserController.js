@@ -1,11 +1,11 @@
 import { User } from "../models/userModel.js";
-import { UserServices } from "../services/user.services.js";
+import { UserServices } from "../services/userServices.js";
 
 export class UserController {
     static getCount = async (req, res) => {
         try {
             const count = await UserServices.getCount();
-            res.send({ count });
+            res.send(count);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de usuarios",

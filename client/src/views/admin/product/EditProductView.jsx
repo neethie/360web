@@ -59,7 +59,7 @@ export default function EditProductView() {
     if (isError) return "Error";
     if (!data) return "No se encontró";
 
-    const product = data[0];
+    const product = data;
 
     return (
         <>

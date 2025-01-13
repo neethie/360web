@@ -8,10 +8,10 @@ export class CategoryServices {
     };
 
     static getCount = async () => {
-        const [, count] = await sequelize.query(
-            "SELECT category_id FROM categories"
+        const [count] = await sequelize.query(
+            "SELECT COUNT(*) as count FROM categories"
         );
-        return count;
+        return count[0];
     };
 
     static getProductCount = async (category_id) => {

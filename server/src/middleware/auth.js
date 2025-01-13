@@ -1,7 +1,7 @@
-import jwt, { decode } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import { UserServices } from "../services/user.services.js";
+import { UserServices } from "../services/userServices.js";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import { checkPermissions } from "../middleware/permissions.js";
-import { CategoryServices } from "../services/category.services.js";
+import { CategoryServices } from "../services/categoryServices.js";
 
 export class CategoryController {
     static getAll = async (req, res) => {
@@ -76,7 +76,7 @@ export class CategoryController {
         try {
             checkPermissions(req, res, 2);
             const count = await CategoryServices.getCount();
-            res.send({ count });
+            res.send(count);
         } catch (error) {
             res.status(500).json({
                 error: "Hubo un error al intentar obtener el conteo de categorias",

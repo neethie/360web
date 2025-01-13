@@ -2,8 +2,8 @@ import bcrypt from "bcrypt";
 
 import { SALT_ROUNDS } from "../config/securityConfig.js";
 import { generateJWT } from "../utils/jwt.js";
-import { AuthServices } from "../services/auth.services.js";
-import { UserServices } from "../services/user.services.js";
+import { AuthServices } from "../services/authServices.js";
+import { UserServices } from "../services/userServices.js";
 
 export class AuthController {
     static register = async (req, res) => {

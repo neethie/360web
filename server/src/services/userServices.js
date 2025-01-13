@@ -24,8 +24,10 @@ export class UserServices {
     };
 
     static getCount = async () => {
-        const [, count] = await sequelize.query("SELECT * FROM users");
-        return count;
+        const [count] = await sequelize.query(
+            "SELECT COUNT(*) as count FROM users"
+        );
+        return count[0];
     };
 
     static searchEmail = async (email) => {
