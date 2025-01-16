@@ -20,7 +20,9 @@ export class CategoriesAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -30,7 +32,9 @@ export class CategoriesAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -40,7 +44,9 @@ export class CategoriesAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -50,7 +56,9 @@ export class CategoriesAPI {
             const { data } = await api.post(url, formData);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -60,7 +68,9 @@ export class CategoriesAPI {
             const { data } = await api.patch(url, formData);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -70,7 +80,9 @@ export class CategoriesAPI {
             const { data } = await api.patch(url, { category_id });
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 }

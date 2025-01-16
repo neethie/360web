@@ -21,6 +21,15 @@ router.get(
 );
 router.get("/", OrderController.getAll);
 router.get(
+    "/check/:order_id",
+    param("order_id")
+        .isInt({ min: 1 })
+        .withMessage("El order_id ingresado no es válido"),
+
+    handleErrors,
+    OrderController.checkById
+);
+router.get(
     "/:order_id",
     param("order_id")
         .isInt({ min: 1 })

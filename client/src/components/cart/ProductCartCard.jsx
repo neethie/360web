@@ -85,7 +85,7 @@ export default function ProductCartCard({ productCart }) {
                 </td>
                 <td>
                     <div className="flex justify-center items-center">
-                        Q{data.price * productCart.quantity}
+                        Q{(data.price * productCart.quantity).toFixed(2)}
                     </div>
                 </td>
             </tr>

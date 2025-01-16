@@ -7,7 +7,9 @@ export class UsersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
     static countAll = async () => {
@@ -16,7 +18,9 @@ export class UsersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
     static getById = async (user_id) => {
@@ -25,7 +29,9 @@ export class UsersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -35,7 +41,9 @@ export class UsersAPI {
             const { data } = await api.patch(url, userData);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -45,9 +53,8 @@ export class UsersAPI {
             const { data } = await api.patch(url, formData);
             return data;
         } catch (error) {
-            console.error(error);
-            if (isAxiosError(error)) {
-                throw new Error(error.response.data.message);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
             }
         }
     };

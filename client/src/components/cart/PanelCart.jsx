@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
 import ProductCartCard from "./ProductCartCard";
 import { useAppStore } from "../../hooks/useAppStore";
+import { useMemo } from "react";
 
 export default function PanelCart({ checkout }) {
     const { cart, resetCart } = useAppStore();
+
+    const total = useMemo(() => {
+        const subtotales = cart.map((item) => item.price * item.quantity);
+        return subtotales.reduce((pre, actual) => pre + actual, 0);
+    }, [cart]);
+
     if (!cart.length) return <p>No hay productos en el carrito</p>;
 
     const handleReset = () => {
         resetCart();
     };
-
     return (
         <>
             <div className="">
@@ -33,6 +39,13 @@ export default function PanelCart({ checkout }) {
                     </tbody>
                 </table>
             </div>
+            <div className="flex justify-center">
+                <p className="font-semibold">
+                    Total:{" "}
+                    <span className="font-normal">${total.toFixed(2)}</span>
+                </p>
+            </div>
+
             {!checkout && (
                 <Link
                     to={"/cart"}

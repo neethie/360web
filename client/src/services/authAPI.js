@@ -8,14 +8,8 @@ export class AuthAPI {
             localStorage.setItem("AUTH_TOKEN", data);
             return data;
         } catch (error) {
-            console.error(error);
-            if (isAxiosError(error)) {
-                if (error.response.data.error)
-                    throw new Error(error.response.data.error);
-                else if (error.response.data.errors)
-                    throw new Error(error.response.data.errors[0].msg);
-                else if (error.response.data)
-                    throw new Error(error.response.data.message);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
             }
         }
     };
@@ -31,13 +25,8 @@ export class AuthAPI {
             localStorage.setItem("AUTH_TOKEN", data);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) {
-                if (error.response.data.error)
-                    throw new Error(error.response.data.error);
-                else if (error.response.data.errors)
-                    throw new Error(error.response.data.errors[0].msg);
-                else if (error.response.data)
-                    throw new Error(error.response.data.message);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
             }
         }
     };

@@ -19,4 +19,14 @@ router.get(
     DetailController.getByMaster
 );
 
+router.get(
+    "/product/:order_details_id",
+    param("order_details_id")
+        .isInt({ min: 1 })
+        .withMessage("El order_details_id ingresado es inválido"),
+
+    handleErrors,
+    DetailController.getProductByDetail
+);
+
 export default router;

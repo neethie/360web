@@ -1,4 +1,5 @@
 import { sequelize } from "../data/db.js";
+import { OrderProducts } from "../models/orderProductsModel.js";
 import { Product } from "../models/productModel.js";
 
 export class OrderServices {
@@ -17,31 +18,34 @@ export class OrderServices {
     };
 
     static getAll = async () => {
-        const [results] = await sequelize.query("LoadOrders");
+        const [results] = await sequelize.query("EXECUTE LoadOrders");
         return results;
     };
 
     static getByUserId = async (user_id) => {
-        const [results] = await sequelize.query("LoadOrdersByUser :user_id", {
-            replacements: {
-                user_id,
-            },
-        });
+        const [results] = await sequelize.query(
+            "EXECUTE LoadOrdersByUser :user_id",
+            {
+                replacements: {
+                    user_id,
+                },
+            }
+        );
         return results;
     };
 
     static getByOrderId = async (order_id) => {
-        const [results] = await sequelize.query("LoadOrder :order_id", {
+        const [results] = await sequelize.query("EXECUTE LoadOrder :order_id", {
             replacements: {
                 order_id,
             },
         });
-        return results;
+        return results[0];
     };
 
     static updateStatus = async (data) => {
         const [results] = await sequelize.query(
-            "UpdateOrderStatus :order_id, :status",
+            "EXECUTE UpdateOrderStatus :order_id, :status",
             {
                 replacements: data,
             }
@@ -60,7 +64,7 @@ export class OrderServices {
     };
 
     static create = async (user_id) => {
-        const [order] = await sequelize.query("CreateOrder :user_id", {
+        const [order] = await sequelize.query("EXECUTE CreateOrder :user_id", {
             replacements: { user_id },
         });
         return order;
@@ -68,7 +72,7 @@ export class OrderServices {
 
     static createDetail = async (data) => {
         const detail = await sequelize.query(
-            "CreateOrderProducts :order_id, :product_id, :quantity",
+            "EXECUTE CreateOrderProducts :order_id, :product_id, :quantity",
             {
                 replacements: data,
             }
@@ -78,11 +82,45 @@ export class OrderServices {
 
     static getDetail = async (order_id) => {
         const [detail] = await sequelize.query(
-            "LoadOrderDetailsByMaster :order_id",
+            "EXECUTE LoadOrderDetailsByMaster :order_id",
             {
                 replacements: { order_id },
             }
         );
         return detail;
+    };
+
+    static getDetailById = async (order_details_id) => {
+        const orderDetail = await OrderProducts.findByPk(order_details_id);
+        return orderDetail;
+    };
+
+    static getProductByDetail = async (order_details_id) => {
+        const [product] = await sequelize.query(
+            "EXECUTE GetProductByDetail :order_details_id",
+            {
+                replacements: { order_details_id },
+            }
+        );
+        return product[0];
+    };
+
+    static updateDetail = async (data) => {
+        const [detail] = await sequelize.query(
+            "EXECUTE UpdateOrderProducts :order_details_id, :product_id, :quantity",
+            {
+                replacements: data,
+            }
+        );
+        return detail;
+    };
+
+    static deleteDetail = async (order_details_id) => {
+        const order = await OrderProducts.destroy({
+            where: {
+                order_details_id,
+            },
+        });
+        return order;
     };
 }

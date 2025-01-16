@@ -3,6 +3,8 @@ import { FaTrash } from "react-icons/fa";
 import { FaPen } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 
+import { FaMinus, FaPlus } from "react-icons/fa6";
+
 import Button from "./Button";
 
 export default function ButtonOption({ option, handleClick, label }) {
@@ -11,6 +13,8 @@ export default function ButtonOption({ option, handleClick, label }) {
         "bg-red-400",
         "bg-orange-400",
         "bg-yellow-400",
+        "bg-green-400",
+        "bg-red-400",
     ];
     const className = `rounded-full p-1 h-5 w-5 ${bgColors[option - 1]}`;
 
@@ -27,6 +31,12 @@ export default function ButtonOption({ option, handleClick, label }) {
             }
             case 4: {
                 return <TbTruckDelivery className={className} />;
+            }
+            case 5: {
+                return <FaPlus className={className} />;
+            }
+            case 6: {
+                return <FaMinus className={className} />;
             }
         }
     };

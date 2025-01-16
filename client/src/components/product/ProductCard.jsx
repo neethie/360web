@@ -41,7 +41,7 @@ export default function ProductCard({ edit, product, preview }) {
             if (productIndex !== -1) {
                 if (
                     productsStore[productsStoreIndex].stock -
-                        (cart[productIndex].quantity + 1) <=
+                        (cart[productIndex].quantity + 1) <
                     0
                 ) {
                     toast.error("No hay suficiente stock");

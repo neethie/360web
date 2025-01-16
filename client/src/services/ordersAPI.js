@@ -8,7 +8,9 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
     static getAll = async () => {
@@ -17,7 +19,9 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -27,7 +31,21 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error)) throw new Error(error.response.data);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
+        }
+    };
+
+    static checkById = async (order_id) => {
+        try {
+            const url = `/orders/check/${order_id}`;
+            const { data } = await api(url);
+            return data;
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -37,7 +55,21 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
+        }
+    };
+
+    static getByDetailId = async (order_details_id) => {
+        try {
+            const url = `/orders/detail/product/${order_details_id}`;
+            const { data } = await api(url);
+            return data;
+        } catch (error) {
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -47,7 +79,9 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -57,7 +91,9 @@ export class OrdersAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -69,7 +105,9 @@ export class OrdersAPI {
             const { data } = await api.post(url, { cart });
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -81,7 +119,9 @@ export class OrdersAPI {
             const { data } = await api.post(url, orderData);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -92,7 +132,9 @@ export class OrdersAPI {
             console.log(data);
             return data;
         } catch (error) {
-            console.error(error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 }

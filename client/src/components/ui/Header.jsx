@@ -123,14 +123,6 @@ export default function Header() {
                                 </Link>
                             </Popover>
                         </ul>
-                        <ul>
-                            <Link
-                                to={"/contact"}
-                                className="uppercase px-2 py-1 "
-                            >
-                                <p>Contacto</p>
-                            </Link>
-                        </ul>
                     </nav>
                     <div className="flex gap-2 relative">
                         <SearchBar />

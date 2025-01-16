@@ -28,6 +28,7 @@ export class ProductServices {
             price_max = null,
             category_id = null,
         } = data;
+        console.log(price_min);
         const [results] = await sequelize.query(
             "LoadProducts :name, :brand, :price_min, :price_max, :category_id",
             {

@@ -13,8 +13,9 @@ export class AuthController {
             const userExists = await UserServices.searchEmail(email);
 
             if (userExists) {
+                const error = new Error("Ya existe ese correo.");
                 res.status(409).json({
-                    error: "Ya existe ese correo",
+                    error: error.message,
                 });
                 return;
             }
@@ -41,8 +42,9 @@ export class AuthController {
             const user = await UserServices.searchEmail(email);
 
             if (!user) {
+                const error = new Error("No existe ese correo.");
                 res.status(409).json({
-                    error: "No existe ese correo",
+                    error: error.message,
                 });
                 return;
             }
@@ -51,14 +53,16 @@ export class AuthController {
                 user.dataValues.password
             );
             if (!verifyPassword) {
+                const error = new Error("Datos erróneos.");
                 res.status(401).json({
-                    message: "Datos erróneos",
+                    error: error.message,
                 });
                 return;
             }
             if (user.dataValues.is_disabled) {
+                const error = new Error("El usuario está inhabilitado.");
                 res.status(423).json({
-                    error: "El usuario está inhabilitado",
+                    error: error.message,
                 });
                 return;
             }

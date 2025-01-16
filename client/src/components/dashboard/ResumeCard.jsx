@@ -20,7 +20,6 @@ export default function ResumeCard({ resume }) {
 
     if (isLoading) return "Cargando...";
     if (isError) return "Error";
-    console.log(data);
     return (
         <div
             className=" p-3 w-full md:w-48 text-white rounded-xl shadow-lg flex items-center justify-between"

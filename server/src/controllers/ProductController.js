@@ -1,8 +1,3 @@
-import sql from "mssql";
-import path from "path";
-import fs from "node:fs";
-
-import { sqlConfig } from "../data/connection.js";
 import { checkPermissions } from "../middleware/permissions.js";
 import { renameImage } from "../middleware/image.js";
 import { ProductServices } from "../services/productServices.js";
@@ -92,8 +87,9 @@ export class ProductController {
                 renameImage(req.file, `product_${product_id}.png`);
             }
             if (!product.length) {
+                const error = new Error("No se encontró el producto");
                 res.status(404).json({
-                    error: "No se encontró el product_id",
+                    error: error.message,
                 });
                 return;
             }

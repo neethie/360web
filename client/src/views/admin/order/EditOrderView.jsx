@@ -12,7 +12,7 @@ export default function EditOrderView() {
         queries: [
             {
                 queryKey: ["getOrder", order_id],
-                queryFn: () => OrdersAPI.getById(order_id),
+                queryFn: () => OrdersAPI.checkById(order_id),
             },
             {
                 queryKey: ["getOrderDetails", order_id],
@@ -37,20 +37,18 @@ export default function EditOrderView() {
             <div className="font-semibold">
                 <p>
                     ID Orden:{" "}
-                    <span className="font-normal">
-                        {order.data[0].order_id}
-                    </span>
+                    <span className="font-normal">{order.data.order_id}</span>
                 </p>
                 <p>
                     Cliente:{" "}
                     <span className="font-normal">
-                        {order.data[0].client_name}
+                        {order.data.client_name}
                     </span>
                 </p>
                 <p>
                     Total a pagar:{" "}
                     <span className="font-normal">
-                        Q{order.data[0].total_price}
+                        Q{order.data.total_price}
                     </span>
                 </p>
             </div>

@@ -1,6 +1,3 @@
-import sql from "mssql";
-
-import { sqlConfig } from "../data/connection.js";
 import { checkPermissions } from "../middleware/permissions.js";
 import { OrderServices } from "../services/orderServices.js";
 
@@ -34,8 +31,9 @@ export class OrderController {
             checkPermissions(req, res, 2);
             const orders = await OrderServices.getAll();
             if (!orders) {
+                const error = new Error("No hay datos.");
                 res.status(404).json({
-                    error: "No hay datos",
+                    error: error.message,
                 });
                 return;
             }
@@ -51,8 +49,11 @@ export class OrderController {
     static getByUserId = async (req, res) => {
         try {
             const { user_id } = req.params;
-            if (user_id != req.user.user_id)
-                return res.status(401).json({ error: "No autorizado" });
+            if (user_id != req.user.user_id) {
+                const error = new Error("No autorizado");
+                return res.status(401).json({ error: error.message });
+            }
+
             const order = await OrderServices.getByUserId(user_id);
             res.send(order);
         } catch (error) {
@@ -68,12 +69,37 @@ export class OrderController {
             const { order_id } = req.params;
             const order = await OrderServices.getByOrderId(order_id);
             if (!order) {
+                const error = new Error("No existe esa orden");
                 res.status(404).json({
-                    error: "No existe ese order_id",
+                    error: error.message,
                 });
                 return;
             }
-            if (order.user_id != req.user.user_id && req.user.rol_id === 1)
+            if (order.user_id != req.user.user_id && req.user.rol_id === 1) {
+                const error = new Error("No autorizado");
+                return res.status(401).json({ error: error.message });
+            }
+            res.send(order);
+        } catch (error) {
+            res.status(500).json({
+                error: "Hubo un error al intentar obtener una orden",
+            });
+            console.error(error);
+        }
+    };
+
+    static checkById = async (req, res) => {
+        try {
+            const { order_id } = req.params;
+            const order = await OrderServices.getByOrderId(order_id);
+            if (!order) {
+                const error = new Error("No existe esa orden");
+                res.status(404).json({
+                    error: error.message,
+                });
+                return;
+            }
+            if (req.user.rol_id === 1)
                 return res.status(401).json({ error: "No autorizado" });
             res.send(order);
         } catch (error) {
@@ -100,7 +126,7 @@ export class OrderController {
                 );
                 if (quantities[i] > productStock[productIndex].stock) {
                     const error = new Error(
-                        `El producto ${checkStock.recordset[productIndex].name} no tiene suficiente stock`
+                        `El producto ${productStock[productIndex].name} no tiene suficiente stock`
                     );
                     return res.status(409).json({
                         error: error.message,
@@ -136,14 +162,16 @@ export class OrderController {
             const order = await OrderServices.getByOrderId(order_id);
 
             if (!order) {
+                const error = new Error("No existe esa orden");
                 res.status(404).json({
-                    error: "No existe ese order_id",
+                    error: error.message,
                 });
                 return;
             }
-            if (order[0].user_id !== user_id) {
-                res.status(403).json({
-                    error: "No autorizado",
+            if (order.user_id !== user_id) {
+                const error = new Error("No autorizado");
+                res.status(401).json({
+                    error: error.message,
                 });
                 return;
             }

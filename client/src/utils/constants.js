@@ -83,5 +83,7 @@ export class Edit {
         cancel: 2,
         edit: 3,
         deliver: 4,
+        plus: 5,
+        minus: 6,
     };
 }

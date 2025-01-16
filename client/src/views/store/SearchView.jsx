@@ -98,14 +98,14 @@ export default function SearchView() {
                             <p className="font-semibold ">
                                 Q{watch("min_price")}.00
                             </p>
-                            <p>Q10,000.00</p>
+                            <p>Q500.00</p>
                         </div>
                         <input
                             type="range"
                             className="w-full"
                             min={0}
-                            max={10000}
-                            step={5}
+                            max={500}
+                            step={1}
                             name="min_price"
                             id="min_price"
                             value={watch("min_price")}
@@ -119,14 +119,14 @@ export default function SearchView() {
                             <p className="font-semibold ">
                                 Q{watch("max_price")}.00
                             </p>
-                            <p>Q10,000.00</p>
+                            <p>Q500.00</p>
                         </div>
                         <input
                             type="range"
                             className="w-full"
                             min={0}
-                            max={10000}
-                            step={5}
+                            max={500}
+                            step={1}
                             name="max_price"
                             id="max_price"
                             value={watch("max_price")}

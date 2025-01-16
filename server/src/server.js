@@ -18,7 +18,7 @@ const server = express();
 
 server.use("/public", express.static("public"));
 server.use(cors(corsConfig));
-//server.use(morgan("dev"));
+server.use(morgan("dev"));
 server.use(express.json());
 // ————— Rutas
 server.use("/api/auth", authRoutes);

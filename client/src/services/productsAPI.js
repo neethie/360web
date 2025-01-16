@@ -9,8 +9,9 @@ export class ProductsAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -20,8 +21,9 @@ export class ProductsAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -29,10 +31,12 @@ export class ProductsAPI {
         try {
             const url = "/products/top";
             const { data } = await api(url);
+            useProductStore.getState().setProductsStore(data);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -42,8 +46,9 @@ export class ProductsAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -53,8 +58,9 @@ export class ProductsAPI {
             const { data } = await api(url);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -68,21 +74,22 @@ export class ProductsAPI {
                             ? null
                             : parseInt(searchData.category_id),
                     name: searchData.name === -1 ? null : searchData.name,
-                    min_price:
+                    price_min:
                         searchData.min_price === 0
                             ? null
-                            : searchData.min_price,
-                    max_price:
-                        searchData.max_price === 10000
+                            : parseInt(searchData.min_price),
+                    price_max:
+                        searchData.max_price === 500
                             ? null
-                            : searchData.max_price,
+                            : parseInt(searchData.max_price),
                 },
             });
             useProductStore.getState().setProductsStore(data);
             return data;
         } catch (error) {
-            if (isAxiosError(error))
-                return new Error(error.response.data.error);
+            if (isAxiosError(error) && error.response) {
+                throw new Error(error.response.data.error);
+            }
         }
     };
 
@@ -91,9 +98,8 @@ export class ProductsAPI {
             const { data } = await api.post("/products/create", formData);
             return data;
         } catch (error) {
-            console.error(error);
             if (isAxiosError(error) && error.response) {
-                throw new Error(error.response.data.errors[0].msg);
+                throw new Error(error.response.data.error);
             }
         }
     };
@@ -105,7 +111,7 @@ export class ProductsAPI {
             return data;
         } catch (error) {
             if (isAxiosError(error) && error.response) {
-                throw new Error(error.response.data.errors[0].msg);
+                throw new Error(error.response.data.error);
             }
         }
     };
@@ -117,7 +123,7 @@ export class ProductsAPI {
             return data;
         } catch (error) {
             if (isAxiosError(error) && error.response) {
-                throw new Error(error.response.data.errors[0].msg);
+                throw new Error(error.response.data.error);
             }
         }
     };

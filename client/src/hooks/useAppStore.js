@@ -35,7 +35,7 @@ export const useAppStore = create()(
             name: -1,
             category_id: -1,
             min_price: 0,
-            max_price: 10000,
+            max_price: 500,
         },
         setSearch: (data) => {
             set(() => ({
@@ -75,6 +75,41 @@ export const useAppStore = create()(
         resetCart: () => {
             set(() => ({
                 cart: [],
+            }));
+        },
+
+        cartTemp: [],
+        addToCartTemp: (product) => {
+            set((state) => ({
+                cartTemp: [...state.cartTemp, product],
+            }));
+        },
+        updateQuantityTemp: (product_id, quantity) => {
+            set((state) => ({
+                cartTemp: state.cartTemp.map((item) =>
+                    item.product_id === product_id
+                        ? { ...item, quantity }
+                        : item
+                ),
+            }));
+        },
+        updateCartTemp: (product) => {
+            set((state) => ({
+                cartTemp: state.cartTemp.map((item) => {
+                    item.product_id === product.product_id ? product : item;
+                }),
+            }));
+        },
+        removeFromCartTemp: (product_id) => {
+            set((state) => ({
+                cartTemp: state.cartTemp.filter(
+                    (item) => item.product_id !== product_id
+                ),
+            }));
+        },
+        resetCartTemp: () => {
+            set(() => ({
+                cartTemp: [],
             }));
         },
     }))
